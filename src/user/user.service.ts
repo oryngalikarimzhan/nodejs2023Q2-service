@@ -1,0 +1,75 @@
+import {
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdatePasswordDto } from './dto/update-password.dto';
+import { User } from './user.entity';
+
+@Injectable()
+export class UserService {
+  users: Record<string, User> = {};
+
+  findAll() {
+    return Object.keys(this.users).map((userId) => this.users[userId]);
+  }
+
+  findOne(userId: string) {
+    const user = this.users[userId];
+
+    if (!user) {
+      throw new NotFoundException();
+    }
+
+    return user;
+  }
+
+  create(createUserDto: CreateUserDto) {
+    const hasUser = !!Object.keys(this.users).find(
+      (userId) => this.users[userId].login === createUserDto.login,
+    );
+
+    if (hasUser) {
+      throw new ForbiddenException(
+        null,
+        'The user with this login already exists',
+      );
+    }
+
+    const user = new User(createUserDto.login, createUserDto.password);
+    this.users[user.id] = user;
+
+    return user;
+  }
+
+  update(userId: string, { oldPassword, newPassword }: UpdatePasswordDto) {
+    const user = this.findOne(userId);
+
+    if (user.password !== oldPassword) {
+      throw new ForbiddenException(null, 'old password is incorrect');
+    }
+
+    if (oldPassword === newPassword) {
+      throw new ForbiddenException(
+        null,
+        'old password and new password can not be the same',
+      );
+    }
+
+    user.password = newPassword;
+    user.updatedAt = Date.now();
+    user.version += 1;
+
+    return user;
+  }
+
+  remove(userId: string) {
+    const user = this.findOne(userId);
+
+    delete this.users[user.id];
+
+    return;
+  }
+}

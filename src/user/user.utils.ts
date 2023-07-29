@@ -1,10 +1,10 @@
-import { Injectable, ParseUUIDPipe } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import {
   ValidatorConstraint,
   ValidatorConstraintInterface,
 } from 'class-validator';
-import { v4 } from 'uuid';
 
+import { getApiParamWithUUIDOptions, randomUUID } from './../app.utils';
 @Injectable()
 @ValidatorConstraint({ name: 'timestamp', async: false })
 export class TimestampValidator implements ValidatorConstraintInterface {
@@ -18,20 +18,8 @@ export class TimestampValidator implements ValidatorConstraintInterface {
   }
 }
 
-export enum UserEndpointResponseDescriptions {
-  SUCCESS_OPERATION = 'Successful operation',
-  ACCESS_TOKEN_MISSING = 'Access token is missing or invalid',
-  INVALID_USER_ID = 'Bad request. userId is invalid (not uuid)',
-  USER_NOT_FOUND = 'User not found',
-  BODY_NOT_FULL = 'Bad request. body does not contain required fields',
-}
+export const UserApiParamOptions = getApiParamWithUUIDOptions('userId');
 
-export const UserApiParamOptions = {
-  name: 'userId',
-  format: 'uuid',
-  required: true,
-};
-export const ParseUUIDPipeInstance = new ParseUUIDPipe({ version: '4' });
 export const UserSchemaOnPUTMethod = {
   type: 'object',
   title: 'User',
@@ -39,7 +27,7 @@ export const UserSchemaOnPUTMethod = {
     id: {
       type: 'string',
       format: 'uuid',
-      example: v4(),
+      example: randomUUID,
     },
     login: {
       type: 'string',

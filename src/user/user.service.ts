@@ -26,19 +26,16 @@ export class UserService {
     return user;
   }
 
-  create(createUserDto: CreateUserDto) {
+  create({ login, password }: CreateUserDto) {
     const hasUser = !!Object.keys(this.users).find(
-      (userId) => this.users[userId].login === createUserDto.login,
+      (userId) => this.users[userId].login === login,
     );
 
     if (hasUser) {
-      throw new ForbiddenException(
-        null,
-        'The user with this login already exists',
-      );
+      throw new ForbiddenException(null, 'User with this login already exists');
     }
 
-    const user = new User(createUserDto.login, createUserDto.password);
+    const user = new User(login, password);
     this.users[user.id] = user;
 
     return user;

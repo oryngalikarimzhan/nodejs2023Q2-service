@@ -10,6 +10,7 @@ import {
   ClassSerializerInterceptor,
   Put,
   HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -30,14 +31,13 @@ import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { User } from './user.entity';
+import { UserApiParamOptions, UserSchemaOnPUTMethod } from './user.utils';
 import {
+  EndpointResponseDescriptions,
   ParseUUIDPipeInstance,
-  UserApiParamOptions,
-  UserEndpointResponseDescriptions,
-  UserSchemaOnPUTMethod,
-} from './user.utils';
+} from '../app.utils';
 
-@ApiTags('Users')
+@ApiTags('User')
 @ApiExtraModels(User, CreateUserDto, UpdatePasswordDto)
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')
@@ -45,14 +45,14 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Gets all users', description: 'Gets all users' })
+  @ApiOperation({ summary: 'Gets all users' })
   @ApiOkResponse({
-    description: UserEndpointResponseDescriptions.SUCCESS_OPERATION,
+    description: EndpointResponseDescriptions.SUCCESS_OPERATION,
     type: User,
     isArray: true,
   })
   @ApiUnauthorizedResponse({
-    description: UserEndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   findAll(): User[] {
     return this.userService.findAll();
@@ -60,22 +60,19 @@ export class UserController {
 
   @Get(':userId')
   @ApiParam(UserApiParamOptions)
-  @ApiOperation({
-    summary: 'Get single user by ID',
-    description: 'Get single user by ID',
-  })
+  @ApiOperation({ summary: 'Get single user by ID' })
   @ApiOkResponse({
-    description: UserEndpointResponseDescriptions.SUCCESS_OPERATION,
+    description: EndpointResponseDescriptions.SUCCESS_OPERATION,
     type: User,
   })
   @ApiBadRequestResponse({
-    description: UserEndpointResponseDescriptions.INVALID_USER_ID,
+    description: EndpointResponseDescriptions.INVALID_ID,
   })
   @ApiUnauthorizedResponse({
-    description: UserEndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   @ApiNotFoundResponse({
-    description: UserEndpointResponseDescriptions.USER_NOT_FOUND,
+    description: EndpointResponseDescriptions.NOT_FOUND,
   })
   findOne(@Param('userId', ParseUUIDPipeInstance) userId: string) {
     return this.userService.findOne(userId);
@@ -86,16 +83,19 @@ export class UserController {
     required: true,
     type: CreateUserDto,
   })
-  @ApiOperation({ summary: 'Creates user', description: 'Creates a new user' })
+  @ApiOperation({ summary: 'Creates a new user' })
   @ApiCreatedResponse({
     description: 'The user has been created',
     type: User,
   })
   @ApiBadRequestResponse({
-    description: UserEndpointResponseDescriptions.BODY_NOT_FULL,
+    description: EndpointResponseDescriptions.BODY_NOT_FULL,
   })
   @ApiUnauthorizedResponse({
-    description: UserEndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+  })
+  @ApiForbiddenResponse({
+    description: 'User with this login already exists',
   })
   create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
@@ -107,26 +107,26 @@ export class UserController {
     required: true,
     type: UpdatePasswordDto,
   })
-  @ApiOperation({
-    summary: "Update a user's password",
-    description: "Updates a user's password by ID",
-  })
+  @ApiOperation({ summary: "Update a user's password by ID" })
   @ApiOkResponse({
-    description: UserEndpointResponseDescriptions.SUCCESS_OPERATION,
+    description: EndpointResponseDescriptions.SUCCESS_OPERATION,
     schema: UserSchemaOnPUTMethod,
   })
   @ApiBadRequestResponse({
-    description: UserEndpointResponseDescriptions.INVALID_USER_ID,
+    description: EndpointResponseDescriptions.INVALID_ID,
   })
   @ApiBadRequestResponse({
-    description: UserEndpointResponseDescriptions.BODY_NOT_FULL,
+    description: EndpointResponseDescriptions.BODY_NOT_FULL,
   })
   @ApiUnauthorizedResponse({
-    description: UserEndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
-  @ApiForbiddenResponse({ description: 'oldPassword is wrong' })
+  @ApiForbiddenResponse({
+    description:
+      'oldPassword is wrong or oldPassword and newPassword are the same',
+  })
   @ApiNotFoundResponse({
-    description: UserEndpointResponseDescriptions.USER_NOT_FOUND,
+    description: EndpointResponseDescriptions.NOT_FOUND,
   })
   update(
     @Param('userId', ParseUUIDPipeInstance) userId: string,
@@ -137,20 +137,17 @@ export class UserController {
 
   @Delete(':userId')
   @ApiParam(UserApiParamOptions)
-  @ApiOperation({
-    summary: 'Deletes user',
-    description: 'Deletes user by ID',
-  })
-  @HttpCode(204)
+  @ApiOperation({ summary: 'Deletes user by ID' })
+  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNoContentResponse({ description: 'The user has been deleted' })
   @ApiBadRequestResponse({
-    description: UserEndpointResponseDescriptions.INVALID_USER_ID,
+    description: EndpointResponseDescriptions.INVALID_ID,
   })
   @ApiUnauthorizedResponse({
-    description: UserEndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   @ApiNotFoundResponse({
-    description: UserEndpointResponseDescriptions.USER_NOT_FOUND,
+    description: EndpointResponseDescriptions.NOT_FOUND,
   })
   remove(@Param('userId', ParseUUIDPipeInstance) userId: string) {
     return this.userService.remove(userId);

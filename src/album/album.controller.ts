@@ -5,11 +5,11 @@ import {
   Body,
   Param,
   Delete,
-  Put,
-  HttpCode,
-  HttpStatus,
-  ValidationPipe,
   ParseUUIDPipe,
+  ValidationPipe,
+  Put,
+  HttpStatus,
+  HttpCode,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -24,44 +24,44 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
-import { ArtistService } from './artist.service';
-import { CreateArtistDto } from './dto/create-artist.dto';
-import { UpdateArtistDto } from './dto/update-artist.dto';
-import { Artist } from './entities/artist.entity';
+import { AlbumService } from './album.service';
+import { CreateAlbumDto } from './dto/create-album.dto';
+import { UpdateAlbumDto } from './dto/update-album.dto';
+import { Album } from './entities/album.entity';
 import { EndpointResponseDescriptions } from '../app.utils';
 import {
-  ArtistApiParamOptions,
-  ArtistBodyExamplesToUpdate,
-  ArtistSchemaUpdated,
-} from './artist.utils';
+  AlbumApiParamOptions,
+  AlbumBodyExamplesToUpdate,
+  AlbumSchemaUpdated,
+} from './album.utils';
 
-@ApiTags('Artist')
-@Controller('artist')
-export class ArtistController {
-  constructor(private readonly artistService: ArtistService) {}
+@ApiTags('Album')
+@Controller('album')
+export class AlbumController {
+  constructor(private readonly albumService: AlbumService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Gets all artists' })
+  @ApiOperation({ summary: 'Gets all albums' })
   @ApiOkResponse({
     description: EndpointResponseDescriptions.SUCCESS_OPERATION,
-    type: Artist,
+    type: Album,
     isArray: true,
   })
   @ApiUnauthorizedResponse({
     description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   findAll() {
-    return this.artistService.findAll();
+    return this.albumService.findAll();
   }
 
-  @Get(':artistId')
-  @ApiParam(ArtistApiParamOptions)
+  @Get(':albumId')
+  @ApiParam(AlbumApiParamOptions)
   @ApiOperation({
-    summary: 'Get single artist by ID',
+    summary: 'Get single album by ID',
   })
   @ApiOkResponse({
     description: EndpointResponseDescriptions.SUCCESS_OPERATION,
-    type: Artist,
+    type: Album,
   })
   @ApiBadRequestResponse({
     description: EndpointResponseDescriptions.INVALID_ID,
@@ -72,19 +72,19 @@ export class ArtistController {
   @ApiNotFoundResponse({
     description: EndpointResponseDescriptions.NOT_FOUND,
   })
-  findOne(@Param('artistId', ParseUUIDPipe) artistId: string) {
-    return this.artistService.findOne(artistId);
+  findOne(@Param('albumId', ParseUUIDPipe) albumId: string) {
+    return this.albumService.findOne(albumId);
   }
 
   @Post()
-  @ApiOperation({ summary: 'Add new artist' })
+  @ApiOperation({ summary: 'Add new album' })
   @ApiBody({
     required: true,
-    type: CreateArtistDto,
+    type: CreateAlbumDto,
   })
   @ApiCreatedResponse({
-    description: 'The user has been created',
-    type: Artist,
+    description: 'The album has been created',
+    type: Album,
   })
   @ApiBadRequestResponse({
     description: EndpointResponseDescriptions.BODY_NOT_FULL,
@@ -92,22 +92,22 @@ export class ArtistController {
   @ApiUnauthorizedResponse({
     description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
-  create(@Body(ValidationPipe) createArtistDto: CreateArtistDto) {
-    return this.artistService.create(createArtistDto);
+  create(@Body(ValidationPipe) createAlbumDto: CreateAlbumDto) {
+    return this.albumService.create(createAlbumDto);
   }
 
-  @Put(':artistId')
-  @ApiParam(ArtistApiParamOptions)
+  @Put(':albumId')
+  @ApiParam(AlbumApiParamOptions)
   @ApiBody({
     description: 'Have to contain at least one field',
     required: true,
-    type: UpdateArtistDto,
-    examples: ArtistBodyExamplesToUpdate,
+    type: UpdateAlbumDto,
+    examples: AlbumBodyExamplesToUpdate,
   })
-  @ApiOperation({ summary: 'Update artist information by ID' })
+  @ApiOperation({ summary: 'Update album information by ID' })
   @ApiOkResponse({
     description: EndpointResponseDescriptions.SUCCESS_OPERATION,
-    schema: ArtistSchemaUpdated,
+    schema: AlbumSchemaUpdated,
   })
   @ApiBadRequestResponse({
     description: `${EndpointResponseDescriptions.INVALID_ID} or ${EndpointResponseDescriptions.BODY_EMPTY}`,
@@ -119,17 +119,17 @@ export class ArtistController {
     description: EndpointResponseDescriptions.NOT_FOUND,
   })
   update(
-    @Param('artistId', ParseUUIDPipe) artistId: string,
-    @Body(ValidationPipe) updateArtistDto: UpdateArtistDto,
+    @Param('albumId', ParseUUIDPipe) albumId: string,
+    @Body(ValidationPipe) updateAlbumDto: UpdateAlbumDto,
   ) {
-    return this.artistService.update(artistId, updateArtistDto);
+    return this.albumService.update(albumId, updateAlbumDto);
   }
 
-  @Delete(':artistId')
-  @ApiParam(ArtistApiParamOptions)
+  @Delete(':albumId')
+  @ApiParam(AlbumApiParamOptions)
   @HttpCode(HttpStatus.NO_CONTENT)
-  @ApiOperation({ summary: 'Delete artist by ID from library' })
-  @ApiNoContentResponse({ description: 'The artist has been deleted' })
+  @ApiOperation({ summary: 'Delete album by ID from library' })
+  @ApiNoContentResponse({ description: 'The album has been deleted' })
   @ApiBadRequestResponse({
     description: EndpointResponseDescriptions.INVALID_ID,
   })
@@ -139,7 +139,7 @@ export class ArtistController {
   @ApiNotFoundResponse({
     description: EndpointResponseDescriptions.NOT_FOUND,
   })
-  remove(@Param('artistId', ParseUUIDPipe) artistId: string) {
-    return this.artistService.remove(artistId);
+  remove(@Param('albumId', ParseUUIDPipe) albumId: string) {
+    return this.albumService.remove(albumId);
   }
 }

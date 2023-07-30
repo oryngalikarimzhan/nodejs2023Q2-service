@@ -6,7 +6,6 @@ export class CreateUserDto {
   @IsString()
   @ApiProperty({ example: 'admin' })
   login: string;
-
   @IsString()
   @Length(5)
   @ApiProperty({ example: 'password' })

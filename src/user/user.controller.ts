@@ -11,12 +11,12 @@ import {
   Put,
   HttpCode,
   HttpStatus,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiBody,
   ApiCreatedResponse,
-  ApiExtraModels,
   ApiForbiddenResponse,
   ApiNoContentResponse,
   ApiNotFoundResponse,
@@ -30,15 +30,11 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
-import { User } from './user.entity';
-import { UserApiParamOptions, UserSchemaOnPUTMethod } from './user.utils';
-import {
-  EndpointResponseDescriptions,
-  ParseUUIDPipeInstance,
-} from '../app.utils';
+import { User } from './entities/user.entity';
+import { UserApiParamOptions, UserSchemaUpdated } from './user.utils';
+import { EndpointResponseDescriptions } from '../app.utils';
 
 @ApiTags('User')
-@ApiExtraModels(User, CreateUserDto, UpdatePasswordDto)
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')
 export class UserController {
@@ -74,7 +70,7 @@ export class UserController {
   @ApiNotFoundResponse({
     description: EndpointResponseDescriptions.NOT_FOUND,
   })
-  findOne(@Param('userId', ParseUUIDPipeInstance) userId: string) {
+  findOne(@Param('userId', ParseUUIDPipe) userId: string) {
     return this.userService.findOne(userId);
   }
 
@@ -110,26 +106,22 @@ export class UserController {
   @ApiOperation({ summary: "Update a user's password by ID" })
   @ApiOkResponse({
     description: EndpointResponseDescriptions.SUCCESS_OPERATION,
-    schema: UserSchemaOnPUTMethod,
+    schema: UserSchemaUpdated,
   })
   @ApiBadRequestResponse({
-    description: EndpointResponseDescriptions.INVALID_ID,
-  })
-  @ApiBadRequestResponse({
-    description: EndpointResponseDescriptions.BODY_NOT_FULL,
+    description: `${EndpointResponseDescriptions.INVALID_ID} or ${EndpointResponseDescriptions.BODY_NOT_FULL} or oldPassword and newPassword are the same`,
   })
   @ApiUnauthorizedResponse({
     description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   @ApiForbiddenResponse({
-    description:
-      'oldPassword is wrong or oldPassword and newPassword are the same',
+    description: 'oldPassword is wrong',
   })
   @ApiNotFoundResponse({
     description: EndpointResponseDescriptions.NOT_FOUND,
   })
   update(
-    @Param('userId', ParseUUIDPipeInstance) userId: string,
+    @Param('userId', ParseUUIDPipe) userId: string,
     @Body(ValidationPipe) updatePasswordDto: UpdatePasswordDto,
   ) {
     return this.userService.update(userId, updatePasswordDto);
@@ -149,7 +141,7 @@ export class UserController {
   @ApiNotFoundResponse({
     description: EndpointResponseDescriptions.NOT_FOUND,
   })
-  remove(@Param('userId', ParseUUIDPipeInstance) userId: string) {
+  remove(@Param('userId', ParseUUIDPipe) userId: string) {
     return this.userService.remove(userId);
   }
 }

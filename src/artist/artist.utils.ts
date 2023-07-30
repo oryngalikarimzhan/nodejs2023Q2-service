@@ -2,7 +2,7 @@ import { getApiParamWithUUIDOptions, randomUUID } from '../app.utils';
 
 export const ArtistApiParamOptions = getApiParamWithUUIDOptions('artistId');
 
-export const ArtistSchemaOnPUTMethod = {
+export const ArtistSchemaUpdated = {
   type: 'object',
   title: 'Artist',
   properties: {
@@ -22,7 +22,7 @@ export const ArtistSchemaOnPUTMethod = {
   },
 };
 
-export const ArtistBodyExamplesOnPUTMethod = {
+export const ArtistBodyExamplesToUpdate = {
   full: {
     value: {
       name: 'James Bond',

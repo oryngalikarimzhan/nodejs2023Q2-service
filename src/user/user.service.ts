@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -6,7 +7,7 @@ import {
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
-import { User } from './user.entity';
+import { User } from './entities/user.entity';
 
 @Injectable()
 export class UserService {
@@ -45,11 +46,11 @@ export class UserService {
     const user = this.findOne(userId);
 
     if (user.password !== oldPassword) {
-      throw new ForbiddenException(null, 'old password is incorrect');
+      throw new ForbiddenException(null, 'old password is wrong');
     }
 
     if (oldPassword === newPassword) {
-      throw new ForbiddenException(
+      throw new BadRequestException(
         null,
         'old password and new password can not be the same',
       );

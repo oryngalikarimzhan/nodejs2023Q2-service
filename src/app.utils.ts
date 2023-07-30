@@ -1,6 +1,4 @@
-import { ParseUUIDPipe } from '@nestjs/common';
 import { v4 } from 'uuid';
-export const ParseUUIDPipeInstance = new ParseUUIDPipe({ version: '4' });
 
 export const getApiParamWithUUIDOptions = (name: string) => ({
   name,

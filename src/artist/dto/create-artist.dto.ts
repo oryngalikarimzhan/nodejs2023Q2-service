@@ -1,13 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsString, Length } from 'class-validator';
+import { OmitType } from '@nestjs/swagger';
+import { Artist } from '../entities/artist.entity';
 
-export class CreateArtistDto {
-  @IsString()
-  @Length(2)
-  @ApiProperty({ example: 'Freddie Mercury' })
-  name: string;
-
-  @IsBoolean()
-  @ApiProperty({ example: false })
-  grammy: boolean;
-}
+export class CreateArtistDto extends OmitType(Artist, ['id'] as const) {}

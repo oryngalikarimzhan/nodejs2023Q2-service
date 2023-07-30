@@ -20,7 +20,7 @@ export class TimestampValidator implements ValidatorConstraintInterface {
 
 export const UserApiParamOptions = getApiParamWithUUIDOptions('userId');
 
-export const UserSchemaOnPUTMethod = {
+export const UserSchemaUpdated = {
   type: 'object',
   title: 'User',
   properties: {

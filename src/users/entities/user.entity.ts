@@ -9,7 +9,7 @@ import {
 import { Exclude } from 'class-transformer';
 import { v4 } from 'uuid';
 
-import { TimestampValidator } from '../user.utils';
+import { TimestampValidator } from '../users.utils';
 import { ApiProperty } from '@nestjs/swagger';
 import { Injectable } from '@nestjs/common';
 

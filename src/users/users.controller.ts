@@ -27,18 +27,18 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
-import { UserService } from './user.service';
+import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { User } from './entities/user.entity';
-import { UserApiParamOptions, UserSchemaUpdated } from './user.utils';
+import { UserApiParamOptions, UserSchemaUpdated } from './users.utils';
 import { EndpointResponseDescriptions } from '../app.utils';
 
 @ApiTags('User')
 @UseInterceptors(ClassSerializerInterceptor)
 @Controller('user')
-export class UserController {
-  constructor(private readonly userService: UserService) {}
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
 
   @Get()
   @ApiOperation({ summary: 'Gets all users' })
@@ -51,7 +51,7 @@ export class UserController {
     description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   findAll(): User[] {
-    return this.userService.findAll();
+    return this.usersService.findAll();
   }
 
   @Get(':userId')
@@ -71,7 +71,7 @@ export class UserController {
     description: EndpointResponseDescriptions.NOT_FOUND,
   })
   findOne(@Param('userId', ParseUUIDPipe) userId: string) {
-    return this.userService.findOne(userId);
+    return this.usersService.findOne(userId);
   }
 
   @Post()
@@ -94,7 +94,7 @@ export class UserController {
     description: 'User with this login already exists',
   })
   create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+    return this.usersService.create(createUserDto);
   }
 
   @Put(':userId')
@@ -124,7 +124,7 @@ export class UserController {
     @Param('userId', ParseUUIDPipe) userId: string,
     @Body(ValidationPipe) updatePasswordDto: UpdatePasswordDto,
   ) {
-    return this.userService.update(userId, updatePasswordDto);
+    return this.usersService.update(userId, updatePasswordDto);
   }
 
   @Delete(':userId')
@@ -142,6 +142,6 @@ export class UserController {
     description: EndpointResponseDescriptions.NOT_FOUND,
   })
   remove(@Param('userId', ParseUUIDPipe) userId: string) {
-    return this.userService.remove(userId);
+    return this.usersService.remove(userId);
   }
 }

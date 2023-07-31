@@ -9,8 +9,9 @@ import { UpdateTrackDto } from './dto/update-track.dto';
 import { Track } from './entities/track.entity';
 
 @Injectable()
-export class TrackService {
+export class TracksService {
   tracks: Record<string, Track> = {};
+
   findAll() {
     return Object.keys(this.tracks).map((trackId) => this.tracks[trackId]);
   }

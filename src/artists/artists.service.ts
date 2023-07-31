@@ -9,7 +9,7 @@ import { UpdateArtistDto } from './dto/update-artist.dto';
 import { Artist } from './entities/artist.entity';
 
 @Injectable()
-export class ArtistService {
+export class ArtistsService {
   artists: Record<string, Artist> = {};
 
   findAll() {

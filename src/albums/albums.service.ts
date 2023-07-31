@@ -8,7 +8,7 @@ import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
 
 @Injectable()
-export class AlbumService {
+export class AlbumsService {
   albums: Record<string, Album> = {};
 
   findAll() {

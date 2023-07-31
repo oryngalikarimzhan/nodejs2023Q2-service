@@ -24,7 +24,7 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 
-import { AlbumService } from './album.service';
+import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
@@ -33,12 +33,12 @@ import {
   AlbumApiParamOptions,
   AlbumBodyExamplesToUpdate,
   AlbumSchemaUpdated,
-} from './album.utils';
+} from './albums.utils';
 
 @ApiTags('Album')
 @Controller('album')
-export class AlbumController {
-  constructor(private readonly albumService: AlbumService) {}
+export class AlbumsController {
+  constructor(private readonly albumsService: AlbumsService) {}
 
   @Get()
   @ApiOperation({ summary: 'Gets all albums' })
@@ -51,7 +51,7 @@ export class AlbumController {
     description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   findAll() {
-    return this.albumService.findAll();
+    return this.albumsService.findAll();
   }
 
   @Get(':albumId')
@@ -73,7 +73,7 @@ export class AlbumController {
     description: EndpointResponseDescriptions.NOT_FOUND,
   })
   findOne(@Param('albumId', ParseUUIDPipe) albumId: string) {
-    return this.albumService.findOne(albumId);
+    return this.albumsService.findOne(albumId);
   }
 
   @Post()
@@ -93,7 +93,7 @@ export class AlbumController {
     description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   create(@Body(ValidationPipe) createAlbumDto: CreateAlbumDto) {
-    return this.albumService.create(createAlbumDto);
+    return this.albumsService.create(createAlbumDto);
   }
 
   @Put(':albumId')
@@ -122,7 +122,7 @@ export class AlbumController {
     @Param('albumId', ParseUUIDPipe) albumId: string,
     @Body(ValidationPipe) updateAlbumDto: UpdateAlbumDto,
   ) {
-    return this.albumService.update(albumId, updateAlbumDto);
+    return this.albumsService.update(albumId, updateAlbumDto);
   }
 
   @Delete(':albumId')
@@ -140,6 +140,6 @@ export class AlbumController {
     description: EndpointResponseDescriptions.NOT_FOUND,
   })
   remove(@Param('albumId', ParseUUIDPipe) albumId: string) {
-    return this.albumService.remove(albumId);
+    return this.albumsService.remove(albumId);
   }
 }

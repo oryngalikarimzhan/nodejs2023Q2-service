@@ -10,7 +10,7 @@ import { UpdatePasswordDto } from './dto/update-password.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
-export class UserService {
+export class UsersService {
   users: Record<string, User> = {};
 
   findAll() {

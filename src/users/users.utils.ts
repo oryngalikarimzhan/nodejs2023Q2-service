@@ -4,7 +4,7 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 
-import { getApiParamWithUUIDOptions, randomUUID } from './../app.utils';
+import { getApiParamWithUUIDOptions, randomUUID } from '../app.utils';
 @Injectable()
 @ValidatorConstraint({ name: 'timestamp', async: false })
 export class TimestampValidator implements ValidatorConstraintInterface {

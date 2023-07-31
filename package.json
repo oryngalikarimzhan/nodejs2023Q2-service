@@ -1,9 +1,7 @@
 {
   "name": "home-library",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
-  "private": true,
+  "author": "Oryngali Karimzhan",
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",

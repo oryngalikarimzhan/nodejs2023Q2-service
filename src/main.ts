@@ -11,7 +11,12 @@ const PORT = +process.env.PORT || 4000;
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   setupSwagger(app);
-  await app.listen(PORT, () => console.log('Server started at port', PORT));
+  await app.listen(PORT, () => {
+    console.log(
+      `Swagger Open Api specs established on http://localhost:${PORT}/doc`,
+    );
+    console.log('Server started at port', PORT);
+  });
 }
 
 bootstrap();

@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsString, IsUUID, Length, Min } from 'class-validator';
+import {
+  IsInt,
+  IsString,
+  IsUUID,
+  Length,
+  Min,
+  ValidateIf,
+} from 'class-validator';
 import { v4 } from 'uuid';
 
 export class Track {
@@ -13,10 +20,12 @@ export class Track {
   name: string;
 
   @IsUUID(4)
+  @ValidateIf((_, value) => value !== null)
   @ApiProperty({ format: 'uuid', nullable: true })
   artistId: string | null;
 
   @IsUUID(4)
+  @ValidateIf((_, value) => value !== null)
   @ApiProperty({ format: 'uuid', nullable: true })
   albumId: string | null;
 

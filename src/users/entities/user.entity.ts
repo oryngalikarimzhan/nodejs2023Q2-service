@@ -8,12 +8,10 @@ import {
 } from 'class-validator';
 import { Exclude } from 'class-transformer';
 import { v4 } from 'uuid';
+import { ApiProperty } from '@nestjs/swagger';
 
 import { TimestampValidator } from '../users.utils';
-import { ApiProperty } from '@nestjs/swagger';
-import { Injectable } from '@nestjs/common';
 
-@Injectable()
 export class User {
   @IsUUID(4)
   @ApiProperty({ format: 'uuid' })
@@ -30,7 +28,7 @@ export class User {
   password: string;
 
   @IsInt()
-  @Min(0)
+  @Min(1)
   @ApiProperty({ example: 1 })
   version: number;
 
@@ -48,8 +46,9 @@ export class User {
     this.id = v4();
     this.login = login;
     this.password = password;
-    this.version = 0;
-    this.createdAt = Date.now();
-    this.updatedAt = Date.now();
+    this.version = 1;
+    const now = Date.now();
+    this.createdAt = now;
+    this.updatedAt = now;
   }
 }

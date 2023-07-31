@@ -55,4 +55,8 @@ export class ArtistsService {
 
     return;
   }
+
+  findArtistsByIds(artistsIds: string[]) {
+    return artistsIds.map((id) => this.artists[id]);
+  }
 }

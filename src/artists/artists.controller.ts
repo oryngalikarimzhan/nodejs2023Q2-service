@@ -34,11 +34,19 @@ import {
   ArtistBodyExamplesToUpdate,
   ArtistSchemaUpdated,
 } from './artists.utils';
+import { AlbumsService } from '../albums/albums.service';
+import { TracksService } from '../tracks/tracks.service';
+import { FavoritesService } from '../favorites/favorites.service';
 
 @ApiTags('Artist')
 @Controller('artist')
 export class ArtistsController {
-  constructor(private readonly artistsService: ArtistsService) {}
+  constructor(
+    private readonly artistsService: ArtistsService,
+    private readonly albumsService: AlbumsService,
+    private readonly tracksService: TracksService,
+    private readonly favoritesService: FavoritesService,
+  ) {}
 
   @Get()
   @ApiOperation({ summary: 'Gets all artists' })
@@ -140,6 +148,21 @@ export class ArtistsController {
     description: EndpointResponseDescriptions.NOT_FOUND,
   })
   remove(@Param('artistId', ParseUUIDPipe) artistId: string) {
+    const album = this.albumsService.findAlbumByArtistId(artistId);
+    const track = this.tracksService.findTrackByArtistId(artistId);
+
+    if (album) {
+      this.albumsService.update(album.id, { artistId: null });
+    }
+
+    if (track) {
+      this.tracksService.update(track.id, { artistId: null });
+    }
+
+    if (this.favoritesService.isArtistExists(artistId)) {
+      this.favoritesService.deleteArtist(artistId);
+    }
+
     return this.artistsService.remove(artistId);
   }
 }

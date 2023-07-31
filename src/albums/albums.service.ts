@@ -3,6 +3,7 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
@@ -53,5 +54,17 @@ export class AlbumsService {
     delete this.albums[albumId];
 
     return;
+  }
+
+  findAlbumByArtistId(artistId: string) {
+    const albumId = Object.keys(this.albums).find(
+      (id) => this.albums[id].artistId === artistId,
+    );
+
+    return this.albums[albumId];
+  }
+
+  findAlbumsByIds(albumsIds: string[]) {
+    return albumsIds.map((id) => this.albums[id]);
   }
 }

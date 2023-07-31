@@ -1,9 +1,15 @@
-import { Injectable } from '@nestjs/common';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsInt, IsString, IsUUID, Length, Max, Min } from 'class-validator';
+import {
+  IsInt,
+  IsString,
+  IsUUID,
+  Length,
+  Max,
+  Min,
+  ValidateIf,
+} from 'class-validator';
 import { v4 } from 'uuid';
 
-@Injectable()
 export class Album {
   @IsUUID(4)
   @ApiProperty({ format: 'uuid' })
@@ -20,7 +26,8 @@ export class Album {
   @ApiProperty({ example: 2020 })
   year: number;
 
-  @IsString()
+  @IsUUID(4)
+  @ValidateIf((_, value) => value !== null)
   @ApiProperty({ format: 'uuid' })
   artistId: string | null;
 

@@ -109,7 +109,10 @@ export class UsersController {
     schema: UserSchemaUpdated,
   })
   @ApiBadRequestResponse({
-    description: `${EndpointResponseDescriptions.INVALID_ID} or ${EndpointResponseDescriptions.BODY_NOT_FULL} or oldPassword and newPassword are the same`,
+    description: `${EndpointResponseDescriptions.INVALID_ID} or 
+      ${EndpointResponseDescriptions.BODY_NOT_FULL} or 
+      ${EndpointResponseDescriptions.BODY_EMPTY} or 
+      oldPassword and newPassword are the same`,
   })
   @ApiUnauthorizedResponse({
     description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,

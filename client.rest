@@ -1,22 +1,40 @@
-### USERS ###
+###################################################################################################
+@hostname = localhost
+@port = 4000
+@host = {{hostname}}:{{port}}
+###################################################################################################
 
+
+@userid = 4317cb57-9170-446e-a5dd-bcb8741b6119
+@artistid = 2b1d465e-2f85-4c78-b7f8-e30c4d4925e5
+@trackid = 44a3a027-7413-44f1-afff-fbd27396b318
+@albumid = f7990b3f-726e-460a-82bc-57b13e211772
+
+
+###################################################################################################
+
+############################################# USERS ###############################################
 ### /user
-GET http://localhost:4000/user HTTP/1.1
 
-### /user/:id
-GET http://localhost:4000/user/4317cb57-9170-446e-a5dd-bcb8741b6119 HTTP/1.1
+### getAllUsers
+GET http://{{host}}/user HTTP/1.1
 
-### /user
-POST http://localhost:4000/user HTTP/1.1
+
+### createUser
+POST http://{{host}}/user HTTP/1.1
 Content-Type: application/json
 
 {
-  "login": "aaaa",
+  "login": "bbbb",
   "password": "aaaaa"
 }
 
-### /user/:id
-PUT http://localhost:4000/user/4d956b68-143b-405f-b8a5-0b6de8ac7a3e HTTP/1.1
+### getUserById
+GET http://{{host}}/user/{{userid}} HTTP/1.1
+
+
+### updateUserById
+PUT http://{{host}}/user/{{userid}} HTTP/1.1
 Content-Type: application/json
 
 {
@@ -24,132 +42,135 @@ Content-Type: application/json
   "newPassword": "aaaaaa"
 }
 
-### /user/:id
-DELETE  http://localhost:4000/user/86811f16-4df1-48db-8186-0843bdd76151 HTTP/1.1
+### deleteUserById
+DELETE  http://{{host}}/user/{{userid}} HTTP/1.1
 
+###################################################################################################
 
-
-
-
-
-
-
-### ARTISTS ###
-
+########################################### ARTISTS ###############################################
 ### /artist
-GET http://localhost:4000/artist HTTP/1.1
 
-### /artist/:id
-GET http://localhost:4000/artist/5edbda65-975a-41b8-bf7a-aa17c2325f40 HTTP/1.1
+### getAllArtists
+GET http://{{host}}/artist HTTP/1.1
 
-### /artist
-POST http://localhost:4000/artist HTTP/1.1
+### createArtist
+POST http://{{host}}/artist HTTP/1.1
 Content-Type: application/json
 
 {
-  "name": "aaaa",
+  "name": "Test Artist",
   "grammy": false
 }
 
-### /artist/:id
-PUT http://localhost:4000/artist/9eb589b5-dcd7-4e7b-b71d-a62b7235ab09 HTTP/1.1
+### getArtistById
+GET http://{{host}}/artist/{{artistid}} HTTP/1.1
+
+
+### updateArtistById
+PUT http://{{host}}/artist/{{artistid}} HTTP/1.1
 Content-Type: application/json
 
 {
   "grammy": true
 }
 
-### /artist/:id
-DELETE  http://localhost:4000/artist/8041b377-9309-4094-be2b-01ac69f2bdb6 HTTP/1.1
+### deleteArtistById
+DELETE  http://{{host}}/artist/{{artistid}} HTTP/1.1
 
 
+###################################################################################################
 
-### TRACKS ###
-
+############################################# TRACKS ##############################################
 ### /track
-GET http://localhost:4000/track HTTP/1.1
 
-### /track/:id
-GET http://localhost:4000/track/5edbda65-975a-41b8-bf7a-aa17c2325f40 HTTP/1.1
+### getAllTracks
+GET http://{{host}}/track HTTP/1.1
 
-### /track
-POST http://localhost:4000/track HTTP/1.1
+### createTrack
+POST http://{{host}}/track HTTP/1.1
 Content-Type: application/json
 
 {
   "name": "aaaa",
-  "grammy": false
+  "artistId": "{{artistid}}",
+  "albumId": null,
+  "duration": 200
 }
 
-### /track/:id
-PUT http://localhost:4000/track/9eb589b5-dcd7-4e7b-b71d-a62b7235ab09 HTTP/1.1
+### getTrackById
+GET http://{{host}}/track/{{trackid}} HTTP/1.1
+
+
+### updateTrackById
+PUT http://{{host}}/track/{{trackid}} HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "bbbbb"
+}
+
+### deleteTrackById
+DELETE  http://{{host}}/track/{{trackid}} HTTP/1.1
+
+
+###################################################################################################
+
+############################################ ALBUMS ##############################################
+### /album
+
+### getAllAlbums
+GET http://{{host}}/album HTTP/1.1
+
+### createAlbum
+POST http://{{host}}/album HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Innuendo",
+  "year": 1999,
+  "artistId": "{{artistid}}"
+}
+
+### getAlbumById
+GET http://{{host}}/album/{{albumid}} HTTP/1.1
+
+### UpdateAlbumById
+PUT http://{{host}}/album/{{albumid}} HTTP/1.1
 Content-Type: application/json
 
 {
   "grammy": true
 }
 
-### /track/:id
-DELETE  http://localhost:4000/track/8041b377-9309-4094-be2b-01ac69f2bdb6 HTTP/1.1
+### deleteAlbumById
+DELETE  http://{{host}}/album/{{albumid}} HTTP/1.1
 
 
+###################################################################################################
 
-
-
-### ALBUMS ###
-
-### /album
-GET http://localhost:4000/album HTTP/1.1
-
-### /album/:id
-GET http://localhost:4000/album/5edbda65-975a-41b8-bf7a-aa17c2325f40 HTTP/1.1
-
-### /album
-POST http://localhost:4000/album HTTP/1.1
-Content-Type: application/json
-
-{
-  "name": "aaaa",
-  "grammy": false
-}
-
-### /album/:id
-PUT http://localhost:4000/album/9eb589b5-dcd7-4e7b-b71d-a62b7235ab09 HTTP/1.1
-Content-Type: application/json
-
-{
-  "grammy": true
-}
-
-### /album/:id
-DELETE  http://localhost:4000/album/8041b377-9309-4094-be2b-01ac69f2bdb6 HTTP/1.1
-
-
-
-
-
-### FAVORITES ###
-
+########################################## FAVORITES ##############################################
 ### /favs
-GET http://localhost:4000/favs HTTP/1.1
+
+### getAllFavorites
+GET http://{{host}}/favs HTTP/1.1
 
 
-### /favs/track/:id
-POST http://localhost:4000/favs/track/8041b377-9309-4094-be2b-01ac69f2bdb6 HTTP/1.1
+### addTrackToFavorites
+POST http://{{host}}/favs/track/4317cb57-9170-446e-a5dd-bcb8741b6119 HTTP/1.1
 
-### /favs/track/:id
-DELETE  http://localhost:4000/favs/track/8041b377-9309-4094-be2b-01ac69f2bdb6 HTTP/1.1
-
-
-### /favs/album/:id
-POST http://localhost:4000/favs/album/8041b377-9309-4094-be2b-01ac69f2bdb6 HTTP/1.1
-
-### /favs/album/:id
-DELETE  http://localhost:4000/favs/album/8041b377-9309-4094-be2b-01ac69f2bdb6 HTTP/1.1
+### deleteTrackFromFavorites
+DELETE  http://{{host}}/favs/track/{{trackid}} HTTP/1.1
 
 
-### /favs/artist/:id
-POST http://localhost:4000/favs/artist/8041b377-9309-4094-be2b-01ac69f2bdb6 HTTP/1.1
+### addAlbumToFavorites
+POST http://{{host}}/favs/album/{{albumid}} HTTP/1.1
 
-### /favs/artist/:id
-DELETE  http://localhost:4000/favs/artist/8041b377-9309-4094-be2b-01ac69f2bdb6 HTTP/1.1
+### deleteAlbumFromFavorites
+DELETE  http://{{host}}/favs/album/{{albumid}} HTTP/1.1
+
+
+### addArtistToFavorites
+POST http://{{host}}/favs/artist/{{artistid}} HTTP/1.1
+
+### deleteArtistFromFavorites
+DELETE  http://{{host}}/favs/artist/{{artistid}} HTTP/1.1

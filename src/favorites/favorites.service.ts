@@ -1,51 +1,54 @@
 import { Injectable } from '@nestjs/common';
 
-import { Artist } from '../artists/entities/artist.entity';
-import { Album } from '../albums/entities/album.entity';
-import { Track } from '../tracks/entities/track.entity';
-import { TracksService } from '../tracks/tracks.service';
-import { AlbumsService } from '../albums/albums.service';
-import { ArtistsService } from '../artists/artists.service';
-
 @Injectable()
 export class FavoritesService {
-  favorites: { artists: Artist[]; albums: Album[]; tracks: Track[] } = {
-    artists: [],
-    albums: [],
-    tracks: [],
+  favorites: {
+    artistsIds: Set<string>;
+    albumsIds: Set<string>;
+    tracksIds: Set<string>;
+  } = {
+    artistsIds: new Set(),
+    albumsIds: new Set(),
+    tracksIds: new Set(),
   };
 
-  constructor(
-    private readonly tracksService: TracksService,
-    private readonly albumsService: AlbumsService,
-    private readonly artistsService: ArtistsService,
-  ) {}
-
   findAll() {
-    return this.artistsService.findAll();
+    return this.favorites;
   }
 
   addTrack(id: string) {
-    return id;
+    return this.favorites.tracksIds.add(id);
   }
 
   deleteTrack(id: string) {
-    return id;
+    return this.favorites.tracksIds.delete(id);
   }
 
   addAlbum(id: string) {
-    return id;
+    return this.favorites.albumsIds.add(id);
   }
 
   deleteAlbum(id: string) {
-    return id;
+    return this.favorites.albumsIds.delete(id);
   }
 
   addArtist(id: string) {
-    return id;
+    return this.favorites.artistsIds.add(id);
   }
 
   deleteArtist(id: string) {
-    return id;
+    return this.favorites.artistsIds.delete(id);
+  }
+
+  isArtistExists(artistId: string) {
+    return this.favorites.artistsIds.has(artistId);
+  }
+
+  isAlbumExists(albumId: string) {
+    return this.favorites.albumsIds.has(albumId);
+  }
+
+  isTrackExists(trackId: string) {
+    return this.favorites.tracksIds.has(trackId);
   }
 }

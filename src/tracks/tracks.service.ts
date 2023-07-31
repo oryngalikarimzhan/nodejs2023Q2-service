@@ -55,4 +55,24 @@ export class TracksService {
 
     return;
   }
+
+  findTrackByArtistId(artistId: string) {
+    const trackId = Object.keys(this.tracks).find(
+      (id) => this.tracks[id].artistId === artistId,
+    );
+
+    return this.tracks[trackId];
+  }
+
+  findTrackByAlbumId(albumId: string) {
+    const trackId = Object.keys(this.tracks).find(
+      (id) => this.tracks[id].albumId === albumId,
+    );
+
+    return this.tracks[trackId];
+  }
+
+  findTracksByIds(tracksIds: string[]) {
+    return tracksIds.map((id) => this.tracks[id]);
+  }
 }

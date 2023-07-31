@@ -34,11 +34,19 @@ import {
   TrackBodyExamplesToUpdate,
   TrackSchemaUpdated,
 } from './tracks.utils';
+import { AlbumsService } from '../albums/albums.service';
+import { ArtistsService } from '../artists/artists.service';
+import { FavoritesService } from '../favorites/favorites.service';
 
 @ApiTags('Track')
 @Controller('track')
 export class TracksController {
-  constructor(private readonly tracksService: TracksService) {}
+  constructor(
+    private readonly tracksService: TracksService,
+    private readonly albumsService: AlbumsService,
+    private readonly artistsService: ArtistsService,
+    private readonly favoritesService: FavoritesService,
+  ) {}
 
   @Get()
   @ApiOperation({ summary: 'Gets all library tracks list' })
@@ -91,6 +99,14 @@ export class TracksController {
     description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   create(@Body(ValidationPipe) createTrackDto: CreateTrackDto) {
+    const { albumId, artistId } = createTrackDto;
+    if (artistId) {
+      this.artistsService.findOne(artistId);
+    }
+    if (albumId) {
+      this.albumsService.findOne(albumId);
+    }
+
     return this.tracksService.create(createTrackDto);
   }
 
@@ -120,6 +136,16 @@ export class TracksController {
     @Param('trackId', ParseUUIDPipe) trackId: string,
     @Body(ValidationPipe) updateTrackDto: UpdateTrackDto,
   ) {
+    const { artistId, albumId } = updateTrackDto;
+
+    if (artistId) {
+      this.artistsService.findOne(artistId);
+    }
+
+    if (albumId) {
+      this.albumsService.findOne(albumId);
+    }
+
     return this.tracksService.update(trackId, updateTrackDto);
   }
 
@@ -138,6 +164,10 @@ export class TracksController {
     description: EndpointResponseDescriptions.NOT_FOUND,
   })
   remove(@Param('trackId', ParseUUIDPipe) trackId: string) {
+    if (this.favoritesService.isTrackExists(trackId)) {
+      this.favoritesService.deleteTrack(trackId);
+    }
+
     return this.tracksService.remove(trackId);
   }
 }

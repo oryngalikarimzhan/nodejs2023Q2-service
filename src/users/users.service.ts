@@ -42,7 +42,15 @@ export class UsersService {
     return user;
   }
 
-  update(userId: string, { oldPassword, newPassword }: UpdatePasswordDto) {
+  update(userId: string, updatePasswordDto: UpdatePasswordDto) {
+    const hasProperties = Object.keys(updatePasswordDto).length > 0;
+
+    if (!hasProperties) {
+      throw new BadRequestException(null, 'Body is empty');
+    }
+
+    const { oldPassword, newPassword } = updatePasswordDto;
+
     const user = this.findOne(userId);
 
     if (user.password !== oldPassword) {

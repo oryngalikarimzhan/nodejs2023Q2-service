@@ -1,0 +1,173 @@
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Delete,
+  ValidationPipe,
+  Put,
+  HttpStatus,
+  HttpCode,
+  ParseUUIDPipe,
+} from '@nestjs/common';
+import {
+  ApiBadRequestResponse,
+  ApiBody,
+  ApiCreatedResponse,
+  ApiNoContentResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
+
+import { TracksService } from './tracks.service';
+import { CreateTrackDto } from './dto/create-track.dto';
+import { UpdateTrackDto } from './dto/update-track.dto';
+import { EndpointResponseDescriptions } from '../app.utils';
+import { Track } from './entities/track.entity';
+import {
+  TrackApiParamOptions,
+  TrackBodyExamplesToUpdate,
+  TrackSchemaUpdated,
+} from './tracks.utils';
+import { AlbumsService } from '../albums/albums.service';
+import { ArtistsService } from '../artists/artists.service';
+import { FavoritesService } from '../favorites/favorites.service';
+
+@ApiTags('Track')
+@Controller('track')
+export class TracksController {
+  constructor(
+    private readonly tracksService: TracksService,
+    private readonly albumsService: AlbumsService,
+    private readonly artistsService: ArtistsService,
+    private readonly favoritesService: FavoritesService,
+  ) {}
+
+  @Get()
+  @ApiOperation({ summary: 'Gets all library tracks list' })
+  @ApiOkResponse({
+    description: EndpointResponseDescriptions.SUCCESS_OPERATION,
+    type: Track,
+    isArray: true,
+  })
+  @ApiUnauthorizedResponse({
+    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+  })
+  findAll() {
+    return this.tracksService.findAll();
+  }
+
+  @Get(':trackId')
+  @ApiParam(TrackApiParamOptions)
+  @ApiOperation({ summary: 'Gets single track by id' })
+  @ApiOkResponse({
+    description: EndpointResponseDescriptions.SUCCESS_OPERATION,
+    type: Track,
+  })
+  @ApiBadRequestResponse({
+    description: EndpointResponseDescriptions.INVALID_ID,
+  })
+  @ApiUnauthorizedResponse({
+    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+  })
+  @ApiNotFoundResponse({
+    description: EndpointResponseDescriptions.NOT_FOUND,
+  })
+  findOne(@Param('trackId', ParseUUIDPipe) trackId: string) {
+    return this.tracksService.findOne(trackId);
+  }
+
+  @Post()
+  @ApiOperation({ summary: 'Add new track' })
+  @ApiBody({
+    required: true,
+    type: CreateTrackDto,
+  })
+  @ApiCreatedResponse({
+    description: 'The track has been created',
+    type: Track,
+  })
+  @ApiBadRequestResponse({
+    description: EndpointResponseDescriptions.BODY_NOT_FULL,
+  })
+  @ApiUnauthorizedResponse({
+    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+  })
+  create(@Body(ValidationPipe) createTrackDto: CreateTrackDto) {
+    const { albumId, artistId } = createTrackDto;
+    if (artistId) {
+      this.artistsService.findOne(artistId);
+    }
+    if (albumId) {
+      this.albumsService.findOne(albumId);
+    }
+
+    return this.tracksService.create(createTrackDto);
+  }
+
+  @Put(':trackId')
+  @ApiParam(TrackApiParamOptions)
+  @ApiBody({
+    description: 'Have to contain at least one field',
+    required: true,
+    type: UpdateTrackDto,
+    examples: TrackBodyExamplesToUpdate,
+  })
+  @ApiOperation({ summary: 'Update library track information by ID' })
+  @ApiOkResponse({
+    description: EndpointResponseDescriptions.SUCCESS_OPERATION,
+    schema: TrackSchemaUpdated,
+  })
+  @ApiBadRequestResponse({
+    description: `${EndpointResponseDescriptions.INVALID_ID} or ${EndpointResponseDescriptions.BODY_EMPTY}`,
+  })
+  @ApiUnauthorizedResponse({
+    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+  })
+  @ApiNotFoundResponse({
+    description: EndpointResponseDescriptions.NOT_FOUND,
+  })
+  update(
+    @Param('trackId', ParseUUIDPipe) trackId: string,
+    @Body(ValidationPipe) updateTrackDto: UpdateTrackDto,
+  ) {
+    const { artistId, albumId } = updateTrackDto;
+
+    if (artistId) {
+      this.artistsService.findOne(artistId);
+    }
+
+    if (albumId) {
+      this.albumsService.findOne(albumId);
+    }
+
+    return this.tracksService.update(trackId, updateTrackDto);
+  }
+
+  @Delete(':trackId')
+  @ApiParam(TrackApiParamOptions)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiOperation({ summary: 'Delete track from library by ID' })
+  @ApiNoContentResponse({ description: 'The track has been deleted' })
+  @ApiBadRequestResponse({
+    description: EndpointResponseDescriptions.INVALID_ID,
+  })
+  @ApiUnauthorizedResponse({
+    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+  })
+  @ApiNotFoundResponse({
+    description: EndpointResponseDescriptions.NOT_FOUND,
+  })
+  remove(@Param('trackId', ParseUUIDPipe) trackId: string) {
+    if (this.favoritesService.isTrackExists(trackId)) {
+      this.favoritesService.deleteTrack(trackId);
+    }
+
+    return this.tracksService.remove(trackId);
+  }
+}

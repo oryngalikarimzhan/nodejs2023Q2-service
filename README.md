@@ -5,6 +5,10 @@
 - Git - [Download & Install Git](https://git-scm.com/downloads).
 - Node.js - [Download & Install Node.js](https://nodejs.org/en/download/) and the npm package manager.
 
+## OpenApi Specs
+
+To see OpenApi specs with swagger-ui run the server and open 'http://localhost:<PORT>/doc' in browser
+
 ## Downloading
 
 ```
@@ -64,9 +68,3 @@ npm run lint
 ```
 npm run format
 ```
-
-### Debugging in VSCode
-
-Press <kbd>F5</kbd> to debug.
-
-For more information, visit: https://code.visualstudio.com/docs/editor/debugging

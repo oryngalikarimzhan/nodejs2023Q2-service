@@ -1,0 +1,176 @@
+###################################################################################################
+@hostname = localhost
+@port = 4000
+@host = {{hostname}}:{{port}}
+###################################################################################################
+
+
+@userid = 4317cb57-9170-446e-a5dd-bcb8741b6119
+@artistid = 2b1d465e-2f85-4c78-b7f8-e30c4d4925e5
+@trackid = 44a3a027-7413-44f1-afff-fbd27396b318
+@albumid = f7990b3f-726e-460a-82bc-57b13e211772
+
+
+###################################################################################################
+
+############################################# USERS ###############################################
+### /user
+
+### getAllUsers
+GET http://{{host}}/user HTTP/1.1
+
+
+### createUser
+POST http://{{host}}/user HTTP/1.1
+Content-Type: application/json
+
+{
+  "login": "bbbb",
+  "password": "aaaaa"
+}
+
+### getUserById
+GET http://{{host}}/user/{{userid}} HTTP/1.1
+
+
+### updateUserById
+PUT http://{{host}}/user/{{userid}} HTTP/1.1
+Content-Type: application/json
+
+{
+  "oldPassword": "aaaaa",
+  "newPassword": "aaaaaa"
+}
+
+### deleteUserById
+DELETE  http://{{host}}/user/{{userid}} HTTP/1.1
+
+###################################################################################################
+
+########################################### ARTISTS ###############################################
+### /artist
+
+### getAllArtists
+GET http://{{host}}/artist HTTP/1.1
+
+### createArtist
+POST http://{{host}}/artist HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Test Artist",
+  "grammy": false
+}
+
+### getArtistById
+GET http://{{host}}/artist/{{artistid}} HTTP/1.1
+
+
+### updateArtistById
+PUT http://{{host}}/artist/{{artistid}} HTTP/1.1
+Content-Type: application/json
+
+{
+  "grammy": true
+}
+
+### deleteArtistById
+DELETE  http://{{host}}/artist/{{artistid}} HTTP/1.1
+
+
+###################################################################################################
+
+############################################# TRACKS ##############################################
+### /track
+
+### getAllTracks
+GET http://{{host}}/track HTTP/1.1
+
+### createTrack
+POST http://{{host}}/track HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "aaaa",
+  "artistId": "{{artistid}}",
+  "albumId": null,
+  "duration": 200
+}
+
+### getTrackById
+GET http://{{host}}/track/{{trackid}} HTTP/1.1
+
+
+### updateTrackById
+PUT http://{{host}}/track/{{trackid}} HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "bbbbb"
+}
+
+### deleteTrackById
+DELETE  http://{{host}}/track/{{trackid}} HTTP/1.1
+
+
+###################################################################################################
+
+############################################ ALBUMS ##############################################
+### /album
+
+### getAllAlbums
+GET http://{{host}}/album HTTP/1.1
+
+### createAlbum
+POST http://{{host}}/album HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Innuendo",
+  "year": 1999,
+  "artistId": "{{artistid}}"
+}
+
+### getAlbumById
+GET http://{{host}}/album/{{albumid}} HTTP/1.1
+
+### UpdateAlbumById
+PUT http://{{host}}/album/{{albumid}} HTTP/1.1
+Content-Type: application/json
+
+{
+  "grammy": true
+}
+
+### deleteAlbumById
+DELETE  http://{{host}}/album/{{albumid}} HTTP/1.1
+
+
+###################################################################################################
+
+########################################## FAVORITES ##############################################
+### /favs
+
+### getAllFavorites
+GET http://{{host}}/favs HTTP/1.1
+
+
+### addTrackToFavorites
+POST http://{{host}}/favs/track/4317cb57-9170-446e-a5dd-bcb8741b6119 HTTP/1.1
+
+### deleteTrackFromFavorites
+DELETE  http://{{host}}/favs/track/{{trackid}} HTTP/1.1
+
+
+### addAlbumToFavorites
+POST http://{{host}}/favs/album/{{albumid}} HTTP/1.1
+
+### deleteAlbumFromFavorites
+DELETE  http://{{host}}/favs/album/{{albumid}} HTTP/1.1
+
+
+### addArtistToFavorites
+POST http://{{host}}/favs/artist/{{artistid}} HTTP/1.1
+
+### deleteArtistFromFavorites
+DELETE  http://{{host}}/favs/artist/{{artistid}} HTTP/1.1

@@ -1,6 +1,8 @@
 import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import * as fs from 'fs';
+import * as YAML from 'js-yaml';
 
 import { AppModule } from './app.module';
 
@@ -22,5 +24,13 @@ export const setupSwagger = (app) => {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
+
+  const specsPath = 'doc/api-spec.yaml';
+
+  if (!fs.existsSync(specsPath)) {
+    const yamlSpec = YAML.dump(document);
+    fs.writeFileSync(specsPath, yamlSpec);
+  }
+
   SwaggerModule.setup('doc', app, document);
 };

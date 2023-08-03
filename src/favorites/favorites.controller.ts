@@ -22,7 +22,7 @@ import {
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
 import { Favorites } from './dto/favorites.dto';
-import { EndpointResponseDescriptions } from '../app.utils';
+import { ResponseDescriptions } from '../app.utils';
 import { FavoritesApiParamOptions } from './favorites.utils';
 
 @ApiTags('Favorites')
@@ -34,7 +34,7 @@ export class FavoritesController {
   @ApiOperation({ summary: 'Get all favorites' })
   @ApiOkResponse({ type: Favorites, description: 'Successful operation' })
   @ApiUnauthorizedResponse({
-    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   findAll() {
     return this.favoritesService.findAll();
@@ -45,10 +45,10 @@ export class FavoritesController {
   @ApiOperation({ summary: 'Add track to the favorites' })
   @ApiCreatedResponse({ description: 'Added successfully' })
   @ApiBadRequestResponse({
-    description: EndpointResponseDescriptions.INVALID_ID,
+    description: ResponseDescriptions.INVALID_ID,
   })
   @ApiUnauthorizedResponse({
-    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   @ApiUnprocessableEntityResponse({
     description: "Track with id doesn't exist",
@@ -62,10 +62,10 @@ export class FavoritesController {
   @ApiOperation({ summary: 'Delete track from favorites' })
   @ApiNoContentResponse({ description: 'Deleted successfully' })
   @ApiBadRequestResponse({
-    description: EndpointResponseDescriptions.INVALID_ID,
+    description: ResponseDescriptions.INVALID_ID,
   })
   @ApiUnauthorizedResponse({
-    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   @ApiNotFoundResponse({ description: 'Track was not found' })
   @HttpCode(204)
@@ -79,10 +79,10 @@ export class FavoritesController {
   @ApiOperation({ summary: 'Add album to the favorites' })
   @ApiCreatedResponse({ description: 'Added successfully' })
   @ApiBadRequestResponse({
-    description: EndpointResponseDescriptions.INVALID_ID,
+    description: ResponseDescriptions.INVALID_ID,
   })
   @ApiUnauthorizedResponse({
-    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   @ApiUnprocessableEntityResponse({
     description: "Album with id doesn't exist",
@@ -96,10 +96,10 @@ export class FavoritesController {
   @ApiOperation({ summary: 'Delete album from favorites' })
   @ApiNoContentResponse({ description: 'Deleted successfully' })
   @ApiBadRequestResponse({
-    description: EndpointResponseDescriptions.INVALID_ID,
+    description: ResponseDescriptions.INVALID_ID,
   })
   @ApiUnauthorizedResponse({
-    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   @ApiNotFoundResponse({ description: 'Album was not found' })
   @HttpCode(204)
@@ -113,10 +113,10 @@ export class FavoritesController {
   @ApiOperation({ summary: 'Add artist to the favorites' })
   @ApiCreatedResponse({ description: 'Added successfully' })
   @ApiBadRequestResponse({
-    description: EndpointResponseDescriptions.INVALID_ID,
+    description: ResponseDescriptions.INVALID_ID,
   })
   @ApiUnauthorizedResponse({
-    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   @ApiUnprocessableEntityResponse({
     description: "Artist with id doesn't exist",
@@ -130,10 +130,10 @@ export class FavoritesController {
   @ApiOperation({ summary: 'Delete artist from favorites' })
   @ApiNoContentResponse({ description: 'Deleted successfully' })
   @ApiBadRequestResponse({
-    description: EndpointResponseDescriptions.INVALID_ID,
+    description: ResponseDescriptions.INVALID_ID,
   })
   @ApiUnauthorizedResponse({
-    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   @ApiNotFoundResponse({ description: 'Artist was not found' })
   @HttpCode(204)

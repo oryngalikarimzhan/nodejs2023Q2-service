@@ -32,7 +32,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePasswordDto } from './dto/update-password.dto';
 import { User } from './entities/user.entity';
 import { UserApiParamOptions, UserSchemaUpdated } from './users.utils';
-import { EndpointResponseDescriptions } from '../app.utils';
+import { ResponseDescriptions } from '../app.utils';
 
 @ApiTags('User')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -43,14 +43,14 @@ export class UsersController {
   @Get()
   @ApiOperation({ summary: 'Gets all users' })
   @ApiOkResponse({
-    description: EndpointResponseDescriptions.SUCCESS_OPERATION,
+    description: ResponseDescriptions.SUCCESS_OPERATION,
     type: User,
     isArray: true,
   })
   @ApiUnauthorizedResponse({
-    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
-  findAll(): User[] {
+  findAll() {
     return this.usersService.findAll();
   }
 
@@ -58,18 +58,14 @@ export class UsersController {
   @ApiParam(UserApiParamOptions)
   @ApiOperation({ summary: 'Get single user by ID' })
   @ApiOkResponse({
-    description: EndpointResponseDescriptions.SUCCESS_OPERATION,
+    description: ResponseDescriptions.SUCCESS_OPERATION,
     type: User,
   })
-  @ApiBadRequestResponse({
-    description: EndpointResponseDescriptions.INVALID_ID,
-  })
+  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
   @ApiUnauthorizedResponse({
-    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
-  @ApiNotFoundResponse({
-    description: EndpointResponseDescriptions.NOT_FOUND,
-  })
+  @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
   findOne(@Param('userId', ParseUUIDPipe) userId: string) {
     return this.usersService.findOne(userId);
   }
@@ -84,15 +80,11 @@ export class UsersController {
     description: 'The user has been created',
     type: User,
   })
-  @ApiBadRequestResponse({
-    description: EndpointResponseDescriptions.BODY_NOT_FULL,
-  })
+  @ApiBadRequestResponse({ description: ResponseDescriptions.BODY_NOT_FULL })
   @ApiUnauthorizedResponse({
-    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
-  @ApiForbiddenResponse({
-    description: 'User with this login already exists',
-  })
+  @ApiForbiddenResponse({ description: 'User with this login already exists' })
   create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
   }
@@ -105,24 +97,20 @@ export class UsersController {
   })
   @ApiOperation({ summary: "Update a user's password by ID" })
   @ApiOkResponse({
-    description: EndpointResponseDescriptions.SUCCESS_OPERATION,
+    description: ResponseDescriptions.SUCCESS_OPERATION,
     schema: UserSchemaUpdated,
   })
   @ApiBadRequestResponse({
-    description: `${EndpointResponseDescriptions.INVALID_ID} or 
-      ${EndpointResponseDescriptions.BODY_NOT_FULL} or 
-      ${EndpointResponseDescriptions.BODY_EMPTY} or 
+    description: `${ResponseDescriptions.INVALID_ID} or 
+      ${ResponseDescriptions.BODY_NOT_FULL} or 
+      ${ResponseDescriptions.BODY_EMPTY} or 
       oldPassword and newPassword are the same`,
   })
   @ApiUnauthorizedResponse({
-    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
-  @ApiForbiddenResponse({
-    description: 'oldPassword is wrong',
-  })
-  @ApiNotFoundResponse({
-    description: EndpointResponseDescriptions.NOT_FOUND,
-  })
+  @ApiForbiddenResponse({ description: 'oldPassword is wrong' })
+  @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
   update(
     @Param('userId', ParseUUIDPipe) userId: string,
     @Body(ValidationPipe) updatePasswordDto: UpdatePasswordDto,
@@ -135,15 +123,11 @@ export class UsersController {
   @ApiOperation({ summary: 'Deletes user by ID' })
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNoContentResponse({ description: 'The user has been deleted' })
-  @ApiBadRequestResponse({
-    description: EndpointResponseDescriptions.INVALID_ID,
-  })
+  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
   @ApiUnauthorizedResponse({
-    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
-  @ApiNotFoundResponse({
-    description: EndpointResponseDescriptions.NOT_FOUND,
-  })
+  @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
   remove(@Param('userId', ParseUUIDPipe) userId: string) {
     return this.usersService.remove(userId);
   }

@@ -28,7 +28,7 @@ import { AlbumsService } from './albums.service';
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
-import { EndpointResponseDescriptions } from '../app.utils';
+import { ResponseDescriptions } from '../app.utils';
 import {
   AlbumApiParamOptions,
   AlbumBodyExamplesToUpdate,
@@ -43,12 +43,12 @@ export class AlbumsController {
   @Get()
   @ApiOperation({ summary: 'Gets all albums' })
   @ApiOkResponse({
-    description: EndpointResponseDescriptions.SUCCESS_OPERATION,
+    description: ResponseDescriptions.SUCCESS_OPERATION,
     type: Album,
     isArray: true,
   })
   @ApiUnauthorizedResponse({
-    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   findAll() {
     return this.albumsService.findAll();
@@ -60,17 +60,17 @@ export class AlbumsController {
     summary: 'Get single album by ID',
   })
   @ApiOkResponse({
-    description: EndpointResponseDescriptions.SUCCESS_OPERATION,
+    description: ResponseDescriptions.SUCCESS_OPERATION,
     type: Album,
   })
   @ApiBadRequestResponse({
-    description: EndpointResponseDescriptions.INVALID_ID,
+    description: ResponseDescriptions.INVALID_ID,
   })
   @ApiUnauthorizedResponse({
-    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   @ApiNotFoundResponse({
-    description: EndpointResponseDescriptions.NOT_FOUND,
+    description: ResponseDescriptions.NOT_FOUND,
   })
   findOne(@Param('albumId', ParseUUIDPipe) albumId: string) {
     return this.albumsService.findOne(albumId);
@@ -87,10 +87,10 @@ export class AlbumsController {
     type: Album,
   })
   @ApiBadRequestResponse({
-    description: EndpointResponseDescriptions.BODY_NOT_FULL,
+    description: ResponseDescriptions.BODY_NOT_FULL,
   })
   @ApiUnauthorizedResponse({
-    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   create(@Body(ValidationPipe) createAlbumDto: CreateAlbumDto) {
     return this.albumsService.create(createAlbumDto);
@@ -106,17 +106,17 @@ export class AlbumsController {
   })
   @ApiOperation({ summary: 'Update album information by ID' })
   @ApiOkResponse({
-    description: EndpointResponseDescriptions.SUCCESS_OPERATION,
+    description: ResponseDescriptions.SUCCESS_OPERATION,
     schema: AlbumSchemaUpdated,
   })
   @ApiBadRequestResponse({
-    description: `${EndpointResponseDescriptions.INVALID_ID} or ${EndpointResponseDescriptions.BODY_EMPTY}`,
+    description: `${ResponseDescriptions.INVALID_ID} or ${ResponseDescriptions.BODY_EMPTY}`,
   })
   @ApiUnauthorizedResponse({
-    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   @ApiNotFoundResponse({
-    description: EndpointResponseDescriptions.NOT_FOUND,
+    description: ResponseDescriptions.NOT_FOUND,
   })
   update(
     @Param('albumId', ParseUUIDPipe) albumId: string,
@@ -131,13 +131,13 @@ export class AlbumsController {
   @ApiOperation({ summary: 'Delete album by ID from library' })
   @ApiNoContentResponse({ description: 'The album has been deleted' })
   @ApiBadRequestResponse({
-    description: EndpointResponseDescriptions.INVALID_ID,
+    description: ResponseDescriptions.INVALID_ID,
   })
   @ApiUnauthorizedResponse({
-    description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   @ApiNotFoundResponse({
-    description: EndpointResponseDescriptions.NOT_FOUND,
+    description: ResponseDescriptions.NOT_FOUND,
   })
   remove(@Param('albumId', ParseUUIDPipe) albumId: string) {
     return this.albumsService.remove(albumId);

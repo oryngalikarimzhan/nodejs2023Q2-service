@@ -1,16 +1,30 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
+  forwardRef,
 } from '@nestjs/common';
 
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
+import { TracksService } from '../tracks/tracks.service';
+import { FavoritesService } from '../favorites/favorites.service';
+import { ArtistsService } from '../artists/artists.service';
 
 @Injectable()
 export class AlbumsService {
   albums: Record<string, Album> = {};
+
+  constructor(
+    @Inject(forwardRef(() => TracksService))
+    private tracksService: TracksService,
+    @Inject(forwardRef(() => ArtistsService))
+    private artistsService: ArtistsService,
+    @Inject(forwardRef(() => FavoritesService))
+    private favoritesService: FavoritesService,
+  ) {}
 
   findAll() {
     return Object.keys(this.albums).map((albumId) => this.albums[albumId]);
@@ -27,6 +41,10 @@ export class AlbumsService {
   }
 
   create({ name, year, artistId }: CreateAlbumDto) {
+    if (artistId) {
+      this.artistsService.findOne(artistId);
+    }
+
     const album = new Album(name, year, artistId);
     this.albums[album.id] = album;
 
@@ -34,6 +52,12 @@ export class AlbumsService {
   }
 
   update(albumId: string, updateAlbumDto: UpdateAlbumDto) {
+    const artistId = updateAlbumDto?.artistId;
+
+    if (artistId) {
+      this.artistsService.findOne(artistId);
+    }
+
     const hasProperties = Object.keys(updateAlbumDto).length > 0;
 
     if (!hasProperties) {
@@ -49,6 +73,17 @@ export class AlbumsService {
   }
 
   remove(albumId: string) {
+    const album = this.favoritesService.isAlbumExists(albumId);
+    const track = this.tracksService.findTrackByAlbumId(albumId);
+
+    if (album) {
+      this.favoritesService.deleteAlbum(albumId);
+    }
+
+    if (track) {
+      this.tracksService.update(track.id, { albumId: null });
+    }
+
     this.findOne(albumId);
 
     delete this.albums[albumId];

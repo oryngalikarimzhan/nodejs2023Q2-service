@@ -6,14 +6,9 @@ import {
   Delete,
   ParseUUIDPipe,
   HttpCode,
-  UnprocessableEntityException,
-  NotFoundException,
 } from '@nestjs/common';
 
 import { FavoritesService } from './favorites.service';
-import { TracksService } from '../tracks/tracks.service';
-import { AlbumsService } from '../albums/albums.service';
-import { ArtistsService } from '../artists/artists.service';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -33,12 +28,7 @@ import { FavoritesApiParamOptions } from './favorites.utils';
 @ApiTags('Favorites')
 @Controller('favs')
 export class FavoritesController {
-  constructor(
-    private readonly favoritesService: FavoritesService,
-    private readonly tracksService: TracksService,
-    private readonly albumsService: AlbumsService,
-    private readonly artistsService: ArtistsService,
-  ) {}
+  constructor(private readonly favoritesService: FavoritesService) {}
 
   @Get()
   @ApiOperation({ summary: 'Get all favorites' })
@@ -47,14 +37,7 @@ export class FavoritesController {
     description: EndpointResponseDescriptions.ACCESS_TOKEN_MISSING,
   })
   findAll() {
-    const { artistsIds, albumsIds, tracksIds } =
-      this.favoritesService.findAll();
-
-    return {
-      artists: this.artistsService.findArtistsByIds([...artistsIds]),
-      albums: this.albumsService.findAlbumsByIds([...albumsIds]),
-      tracks: this.tracksService.findTracksByIds([...tracksIds]),
-    };
+    return this.favoritesService.findAll();
   }
 
   @Post('track/:id')
@@ -71,19 +54,6 @@ export class FavoritesController {
     description: "Track with id doesn't exist",
   })
   addTrack(@Param('id', ParseUUIDPipe) id: string) {
-    try {
-      this.tracksService.findOne(id);
-    } catch (e) {
-      if (e instanceof NotFoundException) {
-        throw new UnprocessableEntityException(
-          null,
-          'track with this id does not exists',
-        );
-      }
-
-      throw e;
-    }
-
     return this.favoritesService.addTrack(id);
   }
 
@@ -100,9 +70,6 @@ export class FavoritesController {
   @ApiNotFoundResponse({ description: 'Track was not found' })
   @HttpCode(204)
   deleteTrack(@Param('id', ParseUUIDPipe) id: string) {
-    if (!this.favoritesService.isTrackExists(id)) {
-      throw new NotFoundException();
-    }
     this.favoritesService.deleteTrack(id);
     return;
   }
@@ -121,18 +88,6 @@ export class FavoritesController {
     description: "Album with id doesn't exist",
   })
   addAlbum(@Param('id', ParseUUIDPipe) id: string) {
-    try {
-      this.albumsService.findOne(id);
-    } catch (e) {
-      if (e instanceof NotFoundException) {
-        throw new UnprocessableEntityException(
-          null,
-          'album with this id does not exists',
-        );
-      }
-
-      throw e;
-    }
     return this.favoritesService.addAlbum(id);
   }
 
@@ -149,9 +104,6 @@ export class FavoritesController {
   @ApiNotFoundResponse({ description: 'Album was not found' })
   @HttpCode(204)
   deleteAlbum(@Param('id', ParseUUIDPipe) id: string) {
-    if (!this.favoritesService.isAlbumExists(id)) {
-      throw new NotFoundException();
-    }
     this.favoritesService.deleteAlbum(id);
     return;
   }
@@ -170,18 +122,6 @@ export class FavoritesController {
     description: "Artist with id doesn't exist",
   })
   addArtist(@Param('id', ParseUUIDPipe) id: string) {
-    try {
-      this.artistsService.findOne(id);
-    } catch (e) {
-      if (e instanceof NotFoundException) {
-        throw new UnprocessableEntityException(
-          null,
-          'artist with this id does not exists',
-        );
-      }
-
-      throw e;
-    }
     return this.favoritesService.addArtist(id);
   }
 
@@ -198,10 +138,6 @@ export class FavoritesController {
   @ApiNotFoundResponse({ description: 'Artist was not found' })
   @HttpCode(204)
   deleteArtist(@Param('id', ParseUUIDPipe) id: string) {
-    if (!this.favoritesService.isArtistExists(id)) {
-      throw new NotFoundException();
-    }
-
     this.favoritesService.deleteArtist(id);
     return;
   }

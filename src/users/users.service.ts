@@ -2,7 +2,6 @@ import {
   BadRequestException,
   ForbiddenException,
   Injectable,
-  InternalServerErrorException,
   NotFoundException,
 } from '@nestjs/common';
 
@@ -36,17 +35,13 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto) {
-    try {
-      const userDto = this.usersRepository.create(createUserDto);
-
-      return await this.usersRepository.save(userDto);
-    } catch (e) {
-      if (e.code && e.code === '23505') {
-        throw new ForbiddenException('User with this login already exists');
-      }
-
-      throw new InternalServerErrorException();
+    if (await this.findByLogin(createUserDto.login)) {
+      throw new ForbiddenException('User with this login already exists');
     }
+
+    const userDto = this.usersRepository.create(createUserDto);
+
+    return await this.usersRepository.save(userDto);
   }
 
   async update(userId: string, updatePasswordDto: UpdatePasswordDto) {
@@ -81,5 +76,9 @@ export class UsersService {
     if (result.affected === 0) {
       throw new NotFoundException();
     }
+  }
+
+  async findByLogin(login: string) {
+    return await this.usersRepository.findOne({ where: { login } });
   }
 }

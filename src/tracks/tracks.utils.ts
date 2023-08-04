@@ -1,5 +1,5 @@
 import { v4 } from 'uuid';
-import { getApiParamWithUUIDOptions, randomUUID } from '../app.utils';
+import { getApiParamWithUUIDOptions, randomID } from '../app.utils';
 
 export const TrackApiParamOptions = getApiParamWithUUIDOptions('trackId');
 
@@ -13,7 +13,7 @@ export const TrackSchemaUpdated = {
     id: {
       type: 'string',
       format: 'uuid',
-      example: randomUUID,
+      example: randomID,
     },
     name: {
       type: 'string',

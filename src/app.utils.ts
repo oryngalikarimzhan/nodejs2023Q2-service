@@ -1,5 +1,4 @@
-import { ValueTransformer } from 'typeorm';
-import { v4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 export const getApiParamWithUUIDOptions = (name: string) => ({
   name,
@@ -7,7 +6,7 @@ export const getApiParamWithUUIDOptions = (name: string) => ({
   required: true,
 });
 
-export const randomUUID = v4();
+export const randomID = randomUUID();
 
 export enum ResponseDescriptions {
   SUCCESS_OPERATION = 'Successful operation',
@@ -16,14 +15,4 @@ export enum ResponseDescriptions {
   NOT_FOUND = 'Not found',
   BODY_NOT_FULL = 'Body does not contain required fields',
   BODY_EMPTY = 'Body is empty',
-}
-
-export class DateToTimestampTransformer implements ValueTransformer {
-  to(value: Date): Date {
-    return value;
-  }
-
-  from(value: Date): number {
-    return value.getTime();
-  }
 }

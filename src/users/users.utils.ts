@@ -4,7 +4,7 @@ import {
   ValidatorConstraintInterface,
 } from 'class-validator';
 
-import { getApiParamWithUUIDOptions, randomUUID } from '../app.utils';
+import { getApiParamWithUUIDOptions, randomID } from '../app.utils';
 @Injectable()
 @ValidatorConstraint({ name: 'timestamp', async: false })
 export class TimestampValidator implements ValidatorConstraintInterface {
@@ -27,7 +27,7 @@ export const UserSchemaUpdated = {
     id: {
       type: 'string',
       format: 'uuid',
-      example: randomUUID,
+      example: randomID,
     },
     login: {
       type: 'string',

@@ -14,17 +14,12 @@ import { FavoritesService } from '../favorites/favorites.service';
 import { ArtistsService } from '../artists/artists.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { Artist } from '../artists/entities/artist.entity';
 
 @Injectable()
 export class AlbumsService {
-  albums: Record<string, Album> = {};
-
   constructor(
     @InjectRepository(Album)
     private readonly albumsRepository: Repository<Album>,
-    // @InjectRepository(Artist)
-    // private readonly artistsRepository: Repository<Artist>,
     @Inject(forwardRef(() => TracksService))
     private tracksService: TracksService,
     @Inject(forwardRef(() => ArtistsService))

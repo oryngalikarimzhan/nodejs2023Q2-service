@@ -1,5 +1,5 @@
 import { v4 } from 'uuid';
-import { getApiParamWithUUIDOptions, randomUUID } from '../app.utils';
+import { getApiParamWithUUIDOptions, randomID } from '../app.utils';
 
 export const AlbumApiParamOptions = getApiParamWithUUIDOptions('albumId');
 
@@ -12,7 +12,7 @@ export const AlbumSchemaUpdated = {
     id: {
       type: 'string',
       format: 'uuid',
-      example: randomUUID,
+      example: randomID,
     },
     name: {
       type: 'string',

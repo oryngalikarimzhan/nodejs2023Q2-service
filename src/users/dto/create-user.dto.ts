@@ -1,13 +1,7 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString, Length } from 'class-validator';
+import { PickType } from '@nestjs/swagger';
+import { User } from '../entities/user.entity';
 
-export class CreateUserDto {
-  @Length(3)
-  @IsString()
-  @ApiProperty({ example: 'admin' })
-  login: string;
-  @IsString()
-  @Length(5)
-  @ApiProperty({ example: 'password' })
-  password: string;
-}
+export class CreateUserDto extends PickType(User, [
+  'login',
+  'password',
+] as const) {}

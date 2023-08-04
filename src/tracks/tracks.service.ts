@@ -45,7 +45,7 @@ export class TracksService {
       await this.artistsService.findOne(artistId);
     }
     if (albumId) {
-      this.albumsService.findOne(albumId);
+      await this.albumsService.findOne(albumId);
     }
 
     const track = new Track(name, albumId, artistId, duration);
@@ -62,7 +62,7 @@ export class TracksService {
     }
 
     if (albumId) {
-      this.albumsService.findOne(albumId);
+      await this.albumsService.findOne(albumId);
     }
 
     const hasProperties = Object.keys(updateTrackDto).length > 0;

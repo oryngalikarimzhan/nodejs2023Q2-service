@@ -36,7 +36,9 @@ export class FavoritesService {
       artists: await this.artistsService.findArtistsByIds([
         ...this.favorites.artistsIds,
       ]),
-      albums: this.albumsService.findAlbumsByIds([...this.favorites.albumsIds]),
+      albums: await this.albumsService.findAlbumsByIds([
+        ...this.favorites.albumsIds,
+      ]),
       tracks: this.tracksService.findTracksByIds([...this.favorites.tracksIds]),
     };
   }
@@ -66,13 +68,12 @@ export class FavoritesService {
     return this.favorites.tracksIds.delete(id);
   }
 
-  addAlbum(id: string) {
+  async addAlbum(id: string) {
     try {
-      this.albumsService.findOne(id);
+      await this.albumsService.findOne(id);
     } catch (e) {
       if (e instanceof NotFoundException) {
         throw new UnprocessableEntityException(
-          null,
           'album with this id does not exists',
         );
       }

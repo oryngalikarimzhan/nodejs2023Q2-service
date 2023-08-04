@@ -65,7 +65,7 @@ export class ArtistsService {
   }
 
   async remove(artistId: string) {
-    const album = this.albumsService.findAlbumByArtistId(artistId);
+    const album = await this.albumsService.findAlbumByArtistId(artistId);
     const track = this.tracksService.findTrackByArtistId(artistId);
 
     if (album) {

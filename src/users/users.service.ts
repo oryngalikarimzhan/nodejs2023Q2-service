@@ -13,8 +13,6 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  users: Record<string, User> = {};
-
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,

@@ -12,12 +12,14 @@ import { Artist } from './entities/artist.entity';
 import { AlbumsService } from '../albums/albums.service';
 import { TracksService } from '../tracks/tracks.service';
 import { FavoritesService } from '../favorites/favorites.service';
+import { InjectRepository } from '@nestjs/typeorm';
+import { In, Repository } from 'typeorm';
 
 @Injectable()
 export class ArtistsService {
-  artists: Record<string, Artist> = {};
-
   constructor(
+    @InjectRepository(Artist)
+    private readonly artistsRepository: Repository<Artist>,
     @Inject(forwardRef(() => TracksService))
     private tracksService: TracksService,
     @Inject(forwardRef(() => AlbumsService))
@@ -26,12 +28,10 @@ export class ArtistsService {
     private favoritesService: FavoritesService,
   ) {}
 
-  findAll() {
-    return Object.keys(this.artists).map((artistId) => this.artists[artistId]);
-  }
-
-  findOne(artistId: string) {
-    const artist = this.artists[artistId];
+  async findOne(artistId: string) {
+    const artist = await this.artistsRepository.findOne({
+      where: { id: artistId },
+    });
 
     if (!artist) {
       throw new NotFoundException();
@@ -40,52 +40,54 @@ export class ArtistsService {
     return artist;
   }
 
-  create({ name, grammy }: CreateArtistDto) {
-    const artist = new Artist(name, grammy);
-    this.artists[artist.id] = artist;
-
-    return artist;
+  async findAll() {
+    return await this.artistsRepository.find();
   }
 
-  update(artistId: string, updateArtistDto: UpdateArtistDto) {
+  async create(createUserDto: CreateArtistDto) {
+    const artist = this.artistsRepository.create(createUserDto);
+
+    return await this.artistsRepository.save(artist);
+  }
+
+  async update(artistId: string, updateArtistDto: UpdateArtistDto) {
     const hasProperties = Object.keys(updateArtistDto).length > 0;
 
     if (!hasProperties) {
-      throw new BadRequestException(null, 'Body is empty');
+      throw new BadRequestException('Body is empty');
     }
 
-    const artist = this.findOne(artistId);
+    const artist = await this.findOne(artistId);
 
     const updatedArtist = { ...artist, ...updateArtistDto };
-    this.artists[artistId] = updatedArtist;
 
-    return updatedArtist;
+    return this.artistsRepository.save(updatedArtist);
   }
 
-  remove(artistId: string) {
+  async remove(artistId: string) {
     const album = this.albumsService.findAlbumByArtistId(artistId);
     const track = this.tracksService.findTrackByArtistId(artistId);
 
     if (album) {
-      this.albumsService.update(album.id, { artistId: null });
+      await this.albumsService.update(album.id, { artistId: null });
     }
 
     if (track) {
-      this.tracksService.update(track.id, { artistId: null });
+      await this.tracksService.update(track.id, { artistId: null });
     }
 
     if (this.favoritesService.isArtistExists(artistId)) {
       this.favoritesService.deleteArtist(artistId);
     }
 
-    const artist = this.findOne(artistId);
+    const result = await this.artistsRepository.delete(artistId);
 
-    delete this.artists[artist.id];
-
-    return;
+    if (result.affected === 0) {
+      throw new NotFoundException();
+    }
   }
 
-  findArtistsByIds(artistsIds: string[]) {
-    return artistsIds.map((id) => this.artists[id]);
+  async findArtistsByIds(artistsIds: string[]) {
+    return await this.artistsRepository.findBy({ id: In(artistsIds) });
   }
 }

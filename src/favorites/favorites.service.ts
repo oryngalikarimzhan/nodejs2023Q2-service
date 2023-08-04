@@ -31,9 +31,9 @@ export class FavoritesService {
     private artistsService: ArtistsService,
   ) {}
 
-  findAll() {
+  async findAll() {
     return {
-      artists: this.artistsService.findArtistsByIds([
+      artists: await this.artistsService.findArtistsByIds([
         ...this.favorites.artistsIds,
       ]),
       albums: this.albumsService.findAlbumsByIds([...this.favorites.albumsIds]),
@@ -91,13 +91,12 @@ export class FavoritesService {
     return this.favorites.albumsIds.delete(id);
   }
 
-  addArtist(id: string) {
+  async addArtist(id: string) {
     try {
-      this.artistsService.findOne(id);
+      await this.artistsService.findOne(id);
     } catch (e) {
       if (e instanceof NotFoundException) {
         throw new UnprocessableEntityException(
-          null,
           'artist with this id does not exists',
         );
       }

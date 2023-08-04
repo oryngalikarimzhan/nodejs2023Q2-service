@@ -40,9 +40,9 @@ export class TracksService {
     return track;
   }
 
-  create({ name, albumId, artistId, duration }: CreateTrackDto) {
+  async create({ name, albumId, artistId, duration }: CreateTrackDto) {
     if (artistId) {
-      this.artistsService.findOne(artistId);
+      await this.artistsService.findOne(artistId);
     }
     if (albumId) {
       this.albumsService.findOne(albumId);
@@ -54,11 +54,11 @@ export class TracksService {
     return track;
   }
 
-  update(trackId: string, updateTrackDto: UpdateTrackDto) {
+  async update(trackId: string, updateTrackDto: UpdateTrackDto) {
     const { artistId, albumId } = updateTrackDto;
 
     if (artistId) {
-      this.artistsService.findOne(artistId);
+      await this.artistsService.findOne(artistId);
     }
 
     if (albumId) {

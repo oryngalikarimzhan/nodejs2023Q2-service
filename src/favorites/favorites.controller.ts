@@ -34,7 +34,7 @@ export class FavoritesController {
   @ApiOperation({ summary: 'Get all favorites' })
   @ApiOkResponse({ type: Favorites, description: 'Successful operation' })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   findAll() {
     return this.favoritesService.findAll();
@@ -48,7 +48,7 @@ export class FavoritesController {
     description: ResponseDescriptions.INVALID_ID,
   })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   @ApiUnprocessableEntityResponse({
     description: "Track with id doesn't exist",
@@ -65,7 +65,7 @@ export class FavoritesController {
     description: ResponseDescriptions.INVALID_ID,
   })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   @ApiNotFoundResponse({ description: 'Track was not found' })
   @HttpCode(204)
@@ -82,7 +82,7 @@ export class FavoritesController {
     description: ResponseDescriptions.INVALID_ID,
   })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   @ApiUnprocessableEntityResponse({
     description: "Album with id doesn't exist",
@@ -99,7 +99,7 @@ export class FavoritesController {
     description: ResponseDescriptions.INVALID_ID,
   })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   @ApiNotFoundResponse({ description: 'Album was not found' })
   @HttpCode(204)
@@ -116,7 +116,7 @@ export class FavoritesController {
     description: ResponseDescriptions.INVALID_ID,
   })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   @ApiUnprocessableEntityResponse({
     description: "Artist with id doesn't exist",
@@ -133,7 +133,7 @@ export class FavoritesController {
     description: ResponseDescriptions.INVALID_ID,
   })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   @ApiNotFoundResponse({ description: 'Artist was not found' })
   @HttpCode(204)

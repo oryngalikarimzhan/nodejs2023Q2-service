@@ -40,9 +40,9 @@ export class AlbumsService {
     return album;
   }
 
-  create({ name, year, artistId }: CreateAlbumDto) {
+  async create({ name, year, artistId }: CreateAlbumDto) {
     if (artistId) {
-      this.artistsService.findOne(artistId);
+      await this.artistsService.findOne(artistId);
     }
 
     const album = new Album(name, year, artistId);
@@ -51,11 +51,11 @@ export class AlbumsService {
     return album;
   }
 
-  update(albumId: string, updateAlbumDto: UpdateAlbumDto) {
+  async update(albumId: string, updateAlbumDto: UpdateAlbumDto) {
     const artistId = updateAlbumDto?.artistId;
 
     if (artistId) {
-      this.artistsService.findOne(artistId);
+      await this.artistsService.findOne(artistId);
     }
 
     const hasProperties = Object.keys(updateAlbumDto).length > 0;
@@ -72,7 +72,7 @@ export class AlbumsService {
     return updatedAlbum;
   }
 
-  remove(albumId: string) {
+  async remove(albumId: string) {
     const album = this.favoritesService.isAlbumExists(albumId);
     const track = this.tracksService.findTrackByAlbumId(albumId);
 
@@ -81,7 +81,7 @@ export class AlbumsService {
     }
 
     if (track) {
-      this.tracksService.update(track.id, { albumId: null });
+      await this.tracksService.update(track.id, { albumId: null });
     }
 
     this.findOne(albumId);

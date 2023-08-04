@@ -48,7 +48,7 @@ export class AlbumsController {
     isArray: true,
   })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   findAll() {
     return this.albumsService.findAll();
@@ -67,7 +67,7 @@ export class AlbumsController {
     description: ResponseDescriptions.INVALID_ID,
   })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   @ApiNotFoundResponse({
     description: ResponseDescriptions.NOT_FOUND,
@@ -90,7 +90,7 @@ export class AlbumsController {
     description: ResponseDescriptions.BODY_NOT_FULL,
   })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   create(@Body(ValidationPipe) createAlbumDto: CreateAlbumDto) {
     return this.albumsService.create(createAlbumDto);
@@ -113,7 +113,7 @@ export class AlbumsController {
     description: `${ResponseDescriptions.INVALID_ID} or ${ResponseDescriptions.BODY_EMPTY}`,
   })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   @ApiNotFoundResponse({
     description: ResponseDescriptions.NOT_FOUND,
@@ -134,7 +134,7 @@ export class AlbumsController {
     description: ResponseDescriptions.INVALID_ID,
   })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   @ApiNotFoundResponse({
     description: ResponseDescriptions.NOT_FOUND,

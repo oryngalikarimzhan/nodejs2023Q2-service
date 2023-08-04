@@ -48,7 +48,7 @@ export class TracksController {
     isArray: true,
   })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   findAll() {
     return this.tracksService.findAll();
@@ -65,7 +65,7 @@ export class TracksController {
     description: ResponseDescriptions.INVALID_ID,
   })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   @ApiNotFoundResponse({
     description: ResponseDescriptions.NOT_FOUND,
@@ -88,7 +88,7 @@ export class TracksController {
     description: ResponseDescriptions.BODY_NOT_FULL,
   })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   create(@Body(ValidationPipe) createTrackDto: CreateTrackDto) {
     return this.tracksService.create(createTrackDto);
@@ -111,7 +111,7 @@ export class TracksController {
     description: `${ResponseDescriptions.INVALID_ID} or ${ResponseDescriptions.BODY_EMPTY}`,
   })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   @ApiNotFoundResponse({
     description: ResponseDescriptions.NOT_FOUND,
@@ -132,7 +132,7 @@ export class TracksController {
     description: ResponseDescriptions.INVALID_ID,
   })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   @ApiNotFoundResponse({
     description: ResponseDescriptions.NOT_FOUND,

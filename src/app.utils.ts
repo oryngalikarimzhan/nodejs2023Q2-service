@@ -11,7 +11,7 @@ export const randomUUID = v4();
 
 export enum ResponseDescriptions {
   SUCCESS_OPERATION = 'Successful operation',
-  ACCESS_TOKEN_MISSING = 'Access token is missing or invalid',
+  NO_ACCESS_TOKEN = 'Access token is missing or invalid',
   INVALID_ID = 'id is invalid (not uuid)',
   NOT_FOUND = 'Not found',
   BODY_NOT_FULL = 'Body does not contain required fields',

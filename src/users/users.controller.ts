@@ -48,7 +48,7 @@ export class UsersController {
     isArray: true,
   })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   findAll() {
     return this.usersService.findAll();
@@ -63,7 +63,7 @@ export class UsersController {
   })
   @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
   findOne(@Param('userId', ParseUUIDPipe) userId: string) {
@@ -82,7 +82,7 @@ export class UsersController {
   })
   @ApiBadRequestResponse({ description: ResponseDescriptions.BODY_NOT_FULL })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   @ApiForbiddenResponse({ description: 'User with this login already exists' })
   create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
@@ -107,7 +107,7 @@ export class UsersController {
       oldPassword and newPassword are the same`,
   })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   @ApiForbiddenResponse({ description: 'oldPassword is wrong' })
   @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
@@ -125,7 +125,7 @@ export class UsersController {
   @ApiNoContentResponse({ description: 'The user has been deleted' })
   @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
   @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.ACCESS_TOKEN_MISSING,
+    description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
   remove(@Param('userId', ParseUUIDPipe) userId: string) {

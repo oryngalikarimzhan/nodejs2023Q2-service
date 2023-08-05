@@ -31,13 +31,13 @@ export class Track {
   @ApiProperty({ example: 'The Show Must Go On' })
   name: string;
 
-  @Column({ name: 'artist_id', default: null, type: 'uuid', nullable: true })
+  @Column({ name: 'artist_id', default: null, type: 'uuid' })
   @IsUUID(4)
   @ValidateIf((_, value) => value !== null)
   @ApiProperty({ format: 'uuid', nullable: true })
   artistId: string | null;
 
-  @Column({ name: 'album_id', default: null, type: 'uuid', nullable: true })
+  @Column({ name: 'album_id', default: null, type: 'uuid' })
   @IsUUID(4)
   @ValidateIf((_, value) => value !== null)
   @ApiProperty({ format: 'uuid', nullable: true })
@@ -50,10 +50,10 @@ export class Track {
   duration: number;
 
   @ManyToOne(() => Artist, { onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'artist_id', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'artist_id' })
   artist: Artist;
 
   @ManyToOne(() => Album, { onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'album_id', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'album_id' })
   album: Album;
 }

@@ -4,7 +4,7 @@ import {
   NotFoundException,
   forwardRef,
 } from '@nestjs/common';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateArtistDto } from './dto/create-artist.dto';
@@ -55,13 +55,5 @@ export class ArtistsService {
     if (affected === 0) {
       throw new NotFoundException();
     }
-
-    if (this.favoritesService.isArtistExists(artistId)) {
-      this.favoritesService.deleteArtist(artistId);
-    }
-  }
-
-  async findArtistsByIds(artistsIds: string[]) {
-    return await this.artistsRepository.findBy({ id: In(artistsIds) });
   }
 }

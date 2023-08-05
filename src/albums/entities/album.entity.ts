@@ -37,14 +37,14 @@ export class Album {
   @ApiProperty({ example: 2020 })
   year: number;
 
-  @Column({ name: 'artist_id', default: null, type: 'uuid', nullable: true })
+  @Column({ name: 'artist_id', default: null, type: 'uuid' })
   @IsUUID(4)
   @ValidateIf((_, value) => value !== null)
   @ApiProperty({ format: 'uuid' })
   artistId: string | null;
 
   @ManyToOne(() => Artist, { onDelete: 'SET NULL' })
-  @JoinColumn({ name: 'artist_id', referencedColumnName: 'id' })
+  @JoinColumn({ name: 'artist_id' })
   @Exclude()
   @ApiHideProperty()
   artist: Artist;

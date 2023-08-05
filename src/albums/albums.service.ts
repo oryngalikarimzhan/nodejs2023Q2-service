@@ -4,8 +4,7 @@ import {
   NotFoundException,
   forwardRef,
 } from '@nestjs/common';
-
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateAlbumDto } from './dto/create-album.dto';
@@ -56,19 +55,5 @@ export class AlbumsService {
     if (affected === 0) {
       throw new NotFoundException();
     }
-
-    const isAlbumExists = this.favoritesService.isAlbumExists(albumId);
-
-    if (isAlbumExists) {
-      this.favoritesService.deleteAlbum(albumId);
-    }
-  }
-
-  async findAlbumByArtistId(id: string) {
-    return await this.albumsRepository.findOneBy({ artist: { id } });
-  }
-
-  async findAlbumsByIds(albumsIds: string[]) {
-    return await this.albumsRepository.findBy({ id: In(albumsIds) });
   }
 }

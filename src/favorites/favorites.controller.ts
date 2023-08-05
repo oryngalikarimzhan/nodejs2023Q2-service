@@ -45,9 +45,7 @@ export class FavoritesController {
   @ApiParam(FavoritesApiParamOptions)
   @ApiOperation({ summary: 'Add track to the favorites' })
   @ApiCreatedResponse({ description: 'Added successfully' })
-  @ApiBadRequestResponse({
-    description: ResponseDescriptions.INVALID_ID,
-  })
+  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
   @ApiUnauthorizedResponse({
     description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
@@ -62,9 +60,7 @@ export class FavoritesController {
   @ApiParam(FavoritesApiParamOptions)
   @ApiOperation({ summary: 'Delete track from favorites' })
   @ApiNoContentResponse({ description: 'Deleted successfully' })
-  @ApiBadRequestResponse({
-    description: ResponseDescriptions.INVALID_ID,
-  })
+  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
   @ApiUnauthorizedResponse({
     description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
@@ -79,9 +75,7 @@ export class FavoritesController {
   @ApiParam(FavoritesApiParamOptions)
   @ApiOperation({ summary: 'Add album to the favorites' })
   @ApiCreatedResponse({ description: 'Added successfully' })
-  @ApiBadRequestResponse({
-    description: ResponseDescriptions.INVALID_ID,
-  })
+  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
   @ApiUnauthorizedResponse({
     description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
@@ -96,9 +90,7 @@ export class FavoritesController {
   @ApiParam(FavoritesApiParamOptions)
   @ApiOperation({ summary: 'Delete album from favorites' })
   @ApiNoContentResponse({ description: 'Deleted successfully' })
-  @ApiBadRequestResponse({
-    description: ResponseDescriptions.INVALID_ID,
-  })
+  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
   @ApiUnauthorizedResponse({
     description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
@@ -113,9 +105,7 @@ export class FavoritesController {
   @ApiParam(FavoritesApiParamOptions)
   @ApiOperation({ summary: 'Add artist to the favorites' })
   @ApiCreatedResponse({ description: 'Added successfully' })
-  @ApiBadRequestResponse({
-    description: ResponseDescriptions.INVALID_ID,
-  })
+  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
   @ApiUnauthorizedResponse({
     description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
@@ -130,9 +120,7 @@ export class FavoritesController {
   @ApiParam(FavoritesApiParamOptions)
   @ApiOperation({ summary: 'Delete artist from favorites' })
   @ApiNoContentResponse({ description: 'Deleted successfully' })
-  @ApiBadRequestResponse({
-    description: ResponseDescriptions.INVALID_ID,
-  })
+  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
   @ApiUnauthorizedResponse({
     description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })

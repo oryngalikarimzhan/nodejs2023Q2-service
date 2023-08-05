@@ -39,13 +39,15 @@ export class FavoritesService {
       albums: await this.albumsService.findAlbumsByIds([
         ...this.favorites.albumsIds,
       ]),
-      tracks: this.tracksService.findTracksByIds([...this.favorites.tracksIds]),
+      tracks: await this.tracksService.findTracksByIds([
+        ...this.favorites.tracksIds,
+      ]),
     };
   }
 
-  addTrack(id: string) {
+  async addTrack(id: string) {
     try {
-      this.tracksService.findOne(id);
+      await this.tracksService.findOne(id);
     } catch (e) {
       if (e instanceof NotFoundException) {
         throw new UnprocessableEntityException(

@@ -10,7 +10,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { Artist } from './entities/artist.entity';
-import { TracksService } from '../tracks/tracks.service';
 import { FavoritesService } from '../favorites/favorites.service';
 
 @Injectable()
@@ -18,8 +17,6 @@ export class ArtistsService {
   constructor(
     @InjectRepository(Artist)
     private readonly artistsRepository: Repository<Artist>,
-    @Inject(forwardRef(() => TracksService))
-    private tracksService: TracksService,
     @Inject(forwardRef(() => FavoritesService))
     private favoritesService: FavoritesService,
   ) {}
@@ -57,12 +54,6 @@ export class ArtistsService {
 
     if (affected === 0) {
       throw new NotFoundException();
-    }
-
-    const track = this.tracksService.findTrackByArtistId(artistId);
-
-    if (track) {
-      await this.tracksService.update(track.id, { artistId: null });
     }
 
     if (this.favoritesService.isArtistExists(artistId)) {

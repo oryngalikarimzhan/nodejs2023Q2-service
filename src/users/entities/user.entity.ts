@@ -1,4 +1,4 @@
-import { IsString, IsUUID, Length } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID, Length } from 'class-validator';
 import { Exclude, Transform } from 'class-transformer';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import {
@@ -18,7 +18,7 @@ export class User {
   id: string;
 
   @Column({ unique: true })
-  @Length(3)
+  @IsNotEmpty()
   @IsString()
   @ApiProperty({ example: 'TestUser' })
   login: string;

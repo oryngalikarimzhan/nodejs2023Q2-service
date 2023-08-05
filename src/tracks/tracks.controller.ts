@@ -61,15 +61,11 @@ export class TracksController {
     description: ResponseDescriptions.SUCCESS_OPERATION,
     type: Track,
   })
-  @ApiBadRequestResponse({
-    description: ResponseDescriptions.INVALID_ID,
-  })
+  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
   @ApiUnauthorizedResponse({
     description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
-  @ApiNotFoundResponse({
-    description: ResponseDescriptions.NOT_FOUND,
-  })
+  @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
   findOne(@Param('trackId', ParseUUIDPipe) trackId: string) {
     return this.tracksService.findOne(trackId);
   }
@@ -84,9 +80,7 @@ export class TracksController {
     description: 'The track has been created',
     type: Track,
   })
-  @ApiBadRequestResponse({
-    description: ResponseDescriptions.BODY_NOT_FULL,
-  })
+  @ApiBadRequestResponse({ description: ResponseDescriptions.BODY_NOT_FULL })
   @ApiUnauthorizedResponse({
     description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
@@ -107,15 +101,11 @@ export class TracksController {
     description: ResponseDescriptions.SUCCESS_OPERATION,
     schema: TrackSchemaUpdated,
   })
-  @ApiBadRequestResponse({
-    description: `${ResponseDescriptions.INVALID_ID}`,
-  })
+  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
   @ApiUnauthorizedResponse({
     description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
-  @ApiNotFoundResponse({
-    description: ResponseDescriptions.NOT_FOUND,
-  })
+  @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
   update(
     @Param('trackId', ParseUUIDPipe) trackId: string,
     @Body(ValidationPipe) updateTrackDto: UpdateTrackDto,
@@ -128,15 +118,11 @@ export class TracksController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete track from library by ID' })
   @ApiNoContentResponse({ description: 'The track has been deleted' })
-  @ApiBadRequestResponse({
-    description: ResponseDescriptions.INVALID_ID,
-  })
+  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
   @ApiUnauthorizedResponse({
     description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
-  @ApiNotFoundResponse({
-    description: ResponseDescriptions.NOT_FOUND,
-  })
+  @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
   remove(@Param('trackId', ParseUUIDPipe) trackId: string) {
     return this.tracksService.remove(trackId);
   }

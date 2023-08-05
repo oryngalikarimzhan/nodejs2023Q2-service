@@ -37,9 +37,9 @@ export class Album {
   @ApiProperty({ example: 2020 })
   year: number;
 
-  @Column({ name: 'artist_id', default: null, type: 'uuid' })
+  @Column({ name: 'artist_id', default: null, type: 'uuid', nullable: true })
   @IsUUID(4)
-  @ValidateIf((_, value) => typeof value === 'string')
+  @ValidateIf((_, value) => value !== null)
   @ApiProperty({ format: 'uuid' })
   artistId: string | null;
 

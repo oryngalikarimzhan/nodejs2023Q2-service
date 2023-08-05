@@ -6,6 +6,7 @@ import {
   Delete,
   ParseUUIDPipe,
   HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import {
   ApiBadRequestResponse,
@@ -68,7 +69,7 @@ export class FavoritesController {
     description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   @ApiNotFoundResponse({ description: 'Track was not found' })
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   deleteTrack(@Param('id', ParseUUIDPipe) id: string) {
     this.favoritesService.deleteTrack(id);
     return;
@@ -102,7 +103,7 @@ export class FavoritesController {
     description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   @ApiNotFoundResponse({ description: 'Album was not found' })
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   deleteAlbum(@Param('id', ParseUUIDPipe) id: string) {
     this.favoritesService.deleteAlbum(id);
     return;
@@ -136,7 +137,7 @@ export class FavoritesController {
     description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
   @ApiNotFoundResponse({ description: 'Artist was not found' })
-  @HttpCode(204)
+  @HttpCode(HttpStatus.NO_CONTENT)
   deleteArtist(@Param('id', ParseUUIDPipe) id: string) {
     this.favoritesService.deleteArtist(id);
     return;

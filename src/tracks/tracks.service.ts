@@ -1,5 +1,4 @@
 import {
-  BadRequestException,
   Inject,
   Injectable,
   NotFoundException,
@@ -63,12 +62,6 @@ export class TracksService {
 
     if (albumId) {
       await this.albumsService.findOne(albumId);
-    }
-
-    const hasProperties = Object.keys(updateTrackDto).length > 0;
-
-    if (!hasProperties) {
-      throw new BadRequestException(null, 'Body is empty');
     }
 
     const track = this.findOne(trackId);

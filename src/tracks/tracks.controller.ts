@@ -108,7 +108,7 @@ export class TracksController {
     schema: TrackSchemaUpdated,
   })
   @ApiBadRequestResponse({
-    description: `${ResponseDescriptions.INVALID_ID} or ${ResponseDescriptions.BODY_EMPTY}`,
+    description: `${ResponseDescriptions.INVALID_ID}`,
   })
   @ApiUnauthorizedResponse({
     description: ResponseDescriptions.NO_ACCESS_TOKEN,

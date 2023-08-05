@@ -1,22 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import {
-  ValidatorConstraint,
-  ValidatorConstraintInterface,
-} from 'class-validator';
-
-import { getApiParamWithUUIDOptions, randomID } from '../app.utils';
-@Injectable()
-@ValidatorConstraint({ name: 'timestamp', async: false })
-export class TimestampValidator implements ValidatorConstraintInterface {
-  public validate(timestamp: number): boolean {
-    const now = Date.now();
-    return now - 1000 * 60 * 5 < timestamp && timestamp < now;
-  }
-
-  public defaultMessage(): string {
-    return 'Timestamp is not valid (can not be the value in the future or older than 5 minutes)';
-  }
-}
+import { getApiParamWithUUIDOptions } from '../app.utils';
 
 export const UserApiParamOptions = getApiParamWithUUIDOptions('userId');
 
@@ -27,7 +9,6 @@ export const UserSchemaUpdated = {
     id: {
       type: 'string',
       format: 'uuid',
-      example: randomID,
     },
     login: {
       type: 'string',

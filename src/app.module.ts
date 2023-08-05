@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { UsersModule } from './users/users.module';
 import { ArtistsModule } from './artists/artists.module';
 import { TracksModule } from './tracks/tracks.module';
 import { AlbumsModule } from './albums/albums.module';
 import { FavoritesModule } from './favorites/favorites.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
 
 @Module({
   imports: [
@@ -22,7 +22,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         port: config.get<number>('TYPEORM_PORT'),
         entities: [__dirname + 'dist/**/*.entity.js'],
         synchronize: true,
-        logging: true,
+        // logging: true,
         autoLoadEntities: true,
       }),
     }),

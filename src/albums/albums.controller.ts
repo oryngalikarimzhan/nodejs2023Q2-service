@@ -63,15 +63,11 @@ export class AlbumsController {
     description: ResponseDescriptions.SUCCESS_OPERATION,
     type: Album,
   })
-  @ApiBadRequestResponse({
-    description: ResponseDescriptions.INVALID_ID,
-  })
+  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
   @ApiUnauthorizedResponse({
     description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
-  @ApiNotFoundResponse({
-    description: ResponseDescriptions.NOT_FOUND,
-  })
+  @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
   findOne(@Param('albumId', ParseUUIDPipe) albumId: string) {
     return this.albumsService.findOne(albumId);
   }
@@ -86,9 +82,7 @@ export class AlbumsController {
     description: 'The album has been created',
     type: Album,
   })
-  @ApiBadRequestResponse({
-    description: ResponseDescriptions.BODY_NOT_FULL,
-  })
+  @ApiBadRequestResponse({ description: ResponseDescriptions.BODY_NOT_FULL })
   @ApiUnauthorizedResponse({
     description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
@@ -110,14 +104,12 @@ export class AlbumsController {
     schema: AlbumSchemaUpdated,
   })
   @ApiBadRequestResponse({
-    description: `${ResponseDescriptions.INVALID_ID} or ${ResponseDescriptions.BODY_EMPTY}`,
+    description: `${ResponseDescriptions.INVALID_ID}`,
   })
   @ApiUnauthorizedResponse({
     description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })
-  @ApiNotFoundResponse({
-    description: ResponseDescriptions.NOT_FOUND,
-  })
+  @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
   update(
     @Param('albumId', ParseUUIDPipe) albumId: string,
     @Body(ValidationPipe) updateAlbumDto: UpdateAlbumDto,

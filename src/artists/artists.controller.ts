@@ -101,9 +101,7 @@ export class ArtistsController {
     description: ResponseDescriptions.SUCCESS_OPERATION,
     schema: ArtistSchemaUpdated,
   })
-  @ApiBadRequestResponse({
-    description: `${ResponseDescriptions.INVALID_ID} or ${ResponseDescriptions.BODY_EMPTY}`,
-  })
+  @ApiBadRequestResponse({ description: `${ResponseDescriptions.INVALID_ID}` })
   @ApiUnauthorizedResponse({
     description: ResponseDescriptions.NO_ACCESS_TOKEN,
   })

@@ -6,7 +6,7 @@
 
 
 @userid = 5b7604e1-909a-45ef-ab80-0c5d708d6833
-@artistid = 2b1d465e-2f85-4c78-b7f8-e30c4d4925e5
+@artistid = 60da35d9-ccbb-4c3e-baf6-121a7cb431eb
 @trackid = 44a3a027-7413-44f1-afff-fbd27396b318
 @albumid = f7990b3f-726e-460a-82bc-57b13e211772
 

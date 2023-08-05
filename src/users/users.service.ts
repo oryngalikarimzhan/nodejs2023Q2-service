@@ -4,12 +4,12 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdatePasswordDto } from './dto/update-password.dto';
+import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { User } from './entities/user.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
@@ -22,8 +22,8 @@ export class UsersService {
     return await this.usersRepository.find();
   }
 
-  async findOne(userId: string) {
-    const user = await this.usersRepository.findOne({ where: { id: userId } });
+  async findOne(id: string) {
+    const user = await this.usersRepository.findOneBy({ id });
 
     if (!user) {
       throw new NotFoundException();
@@ -33,25 +33,18 @@ export class UsersService {
   }
 
   async create(createUserDto: CreateUserDto) {
-    if (await this.findByLogin(createUserDto.login)) {
-      throw new ForbiddenException('User with this login already exists');
-    }
+    this.checkLoginExistence(createUserDto.login);
 
-    const userDto = this.usersRepository.create(createUserDto);
+    const user = this.usersRepository.create(createUserDto);
 
-    return await this.usersRepository.save(userDto);
+    return await this.usersRepository.save(user);
   }
 
-  async update(userId: string, updatePasswordDto: UpdatePasswordDto) {
-    const hasProperties = Object.keys(updatePasswordDto).length > 0;
-
-    if (!hasProperties) {
-      throw new BadRequestException('Body is empty');
-    }
-
-    const { oldPassword, newPassword } = updatePasswordDto;
-
-    const user = await this.findOne(userId);
+  async update(
+    id: string,
+    { oldPassword, newPassword }: UpdateUserPasswordDto,
+  ) {
+    const user = await this.findOne(id);
 
     if (user.password !== oldPassword) {
       throw new ForbiddenException('old password is wrong');
@@ -68,15 +61,19 @@ export class UsersService {
     return this.usersRepository.save(user);
   }
 
-  async remove(userId: string) {
-    const result = await this.usersRepository.delete(userId);
+  async remove(id: string) {
+    const { affected } = await this.usersRepository.delete(id);
 
-    if (result.affected === 0) {
+    if (affected === 0) {
       throw new NotFoundException();
     }
   }
 
-  async findByLogin(login: string) {
-    return await this.usersRepository.findOne({ where: { login } });
+  async checkLoginExistence(login: string) {
+    const user = await this.usersRepository.findOneBy({ login });
+
+    if (user) {
+      throw new ForbiddenException('User with this login already exists');
+    }
   }
 }

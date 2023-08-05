@@ -1,6 +1,6 @@
 import { IsString, IsUUID, Length } from 'class-validator';
 import { Exclude, Transform } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import {
   Column,
   CreateDateColumn,
@@ -24,9 +24,8 @@ export class User {
   login: string;
 
   @Column()
-  @IsString()
-  @Length(5)
   @Exclude({ toPlainOnly: true })
+  @ApiHideProperty()
   password: string;
 
   @VersionColumn()
@@ -34,12 +33,12 @@ export class User {
   version: number;
 
   @CreateDateColumn()
-  @ApiProperty({ example: 1655000000 })
+  @ApiProperty({ example: 1655000000, type: Number })
   @Transform(({ value }) => value.getTime(), { toPlainOnly: true })
   createdAt: Date;
 
   @UpdateDateColumn()
-  @ApiProperty({ example: 1655000000 })
+  @ApiProperty({ example: 1655000000, type: Number })
   @Transform(({ value }) => value.getTime(), { toPlainOnly: true })
   updatedAt: Date;
 }

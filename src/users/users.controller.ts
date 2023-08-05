@@ -29,7 +29,7 @@ import {
 
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdatePasswordDto } from './dto/update-password.dto';
+import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { User } from './entities/user.entity';
 import { UserApiParamOptions, UserSchemaUpdated } from './users.utils';
 import { ResponseDescriptions } from '../app.utils';
@@ -93,7 +93,7 @@ export class UsersController {
   @ApiParam(UserApiParamOptions)
   @ApiBody({
     required: true,
-    type: UpdatePasswordDto,
+    type: UpdateUserPasswordDto,
   })
   @ApiOperation({ summary: "Update a user's password by ID" })
   @ApiOkResponse({
@@ -103,7 +103,6 @@ export class UsersController {
   @ApiBadRequestResponse({
     description: `${ResponseDescriptions.INVALID_ID} or 
       ${ResponseDescriptions.BODY_NOT_FULL} or 
-      ${ResponseDescriptions.BODY_EMPTY} or 
       oldPassword and newPassword are the same`,
   })
   @ApiUnauthorizedResponse({
@@ -113,7 +112,7 @@ export class UsersController {
   @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
   update(
     @Param('userId', ParseUUIDPipe) userId: string,
-    @Body(ValidationPipe) updatePasswordDto: UpdatePasswordDto,
+    @Body(ValidationPipe) updatePasswordDto: UpdateUserPasswordDto,
   ) {
     return this.usersService.update(userId, updatePasswordDto);
   }

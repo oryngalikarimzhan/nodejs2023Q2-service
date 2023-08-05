@@ -7,8 +7,6 @@ import {
   ParseUUIDPipe,
   HttpCode,
 } from '@nestjs/common';
-
-import { FavoritesService } from './favorites.service';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
@@ -21,6 +19,8 @@ import {
   ApiUnauthorizedResponse,
   ApiUnprocessableEntityResponse,
 } from '@nestjs/swagger';
+
+import { FavoritesService } from './favorites.service';
 import { Favorites } from './dto/favorites.dto';
 import { ResponseDescriptions } from '../app.utils';
 import { FavoritesApiParamOptions } from './favorites.utils';

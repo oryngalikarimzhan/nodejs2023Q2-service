@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsUUID, Length } from 'class-validator';
+import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
 import { Exclude, Transform } from 'class-transformer';
 import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import {
@@ -10,7 +10,7 @@ import {
   VersionColumn,
 } from 'typeorm';
 
-@Entity('user')
+@Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
   @IsUUID(4)

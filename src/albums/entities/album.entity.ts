@@ -18,7 +18,7 @@ import {
 
 import { Artist } from '../../artists/entities/artist.entity';
 
-@Entity('album')
+@Entity('albums')
 export class Album {
   @PrimaryGeneratedColumn('uuid')
   @IsUUID(4)

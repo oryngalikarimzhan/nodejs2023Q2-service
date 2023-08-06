@@ -12,16 +12,6 @@ import { FavoriteTrack } from './entities/favorite-track.entity';
 
 @Injectable()
 export class FavoritesService {
-  favorites: {
-    artistsIds: Set<string>;
-    albumsIds: Set<string>;
-    tracksIds: Set<string>;
-  } = {
-    artistsIds: new Set(),
-    albumsIds: new Set(),
-    tracksIds: new Set(),
-  };
-
   constructor(
     @InjectRepository(FavoriteArtist)
     private readonly favoriteArtistsRepository: Repository<FavoriteArtist>,
@@ -51,7 +41,7 @@ export class FavoritesService {
     try {
       await this.favoriteTracksRepository.save(favTrack);
     } catch (e) {
-      if (e.code === '23503') {
+      if (e.code && e.code === '23503') {
         throw new UnprocessableEntityException(
           'track with this id does not exists',
         );
@@ -77,7 +67,7 @@ export class FavoritesService {
     try {
       await this.favoriteAlbumsRepository.save(favAlbum);
     } catch (e) {
-      if (e.code === '23503') {
+      if (e.code && e.code === '23503') {
         throw new UnprocessableEntityException(
           'album with this id does not exists',
         );
@@ -103,7 +93,7 @@ export class FavoritesService {
     try {
       await this.favoriteArtistsRepository.save(favArtist);
     } catch (e) {
-      if (e.code === '23503') {
+      if (e.code && e.code === '23503') {
         throw new UnprocessableEntityException(
           'artist with this id does not exists',
         );

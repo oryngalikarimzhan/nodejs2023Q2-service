@@ -8,12 +8,12 @@ import {
 
 import { Album } from '../../albums/entities/album.entity';
 
-@Entity('favorite_album')
+@Entity('favorite_albums')
 export class FavoriteAlbum {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'album_id' })
+  @Column({ name: 'album_id', type: 'uuid' })
   albumId: string;
 
   @OneToOne(() => Album, { onDelete: 'CASCADE' })

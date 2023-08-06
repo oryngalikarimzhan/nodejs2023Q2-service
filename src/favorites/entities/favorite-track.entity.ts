@@ -8,12 +8,12 @@ import {
 
 import { Track } from '../../tracks/entities/track.entity';
 
-@Entity('favorite_track')
+@Entity('favorite_tracks')
 export class FavoriteTrack {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'track_id' })
+  @Column({ name: 'track_id', type: 'uuid' })
   trackId: string;
 
   @OneToOne(() => Track, { onDelete: 'CASCADE' })

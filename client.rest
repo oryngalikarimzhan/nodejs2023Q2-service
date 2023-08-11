@@ -175,3 +175,8 @@ POST http://{{host}}/favs/artist/{{artistid}} HTTP/1.1
 
 ### deleteArtistFromFavorites
 DELETE  http://{{host}}/favs/artist/{{artistid}} HTTP/1.1
+
+
+
+
+docker scout quickview node:current-alpine

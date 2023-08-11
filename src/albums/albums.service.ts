@@ -44,9 +44,7 @@ export class AlbumsService {
   async update(id: string, updateAlbumDto: UpdateAlbumDto) {
     const album = await this.findOne(id);
 
-    const updatedAlbum = { ...album, ...updateAlbumDto };
-
-    return await this.albumsRepository.save(updatedAlbum);
+    return await this.albumsRepository.save({ ...album, ...updateAlbumDto });
   }
 
   async remove(albumId: string) {

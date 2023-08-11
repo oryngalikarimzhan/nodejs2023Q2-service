@@ -44,9 +44,7 @@ export class ArtistsService {
   async update(artistId: string, updateArtistDto: UpdateArtistDto) {
     const artist = await this.findOne(artistId);
 
-    const updatedArtist = { ...artist, ...updateArtistDto };
-
-    return await this.artistsRepository.save(updatedArtist);
+    return await this.artistsRepository.save({ ...artist, ...updateArtistDto });
   }
 
   async remove(artistId: string) {

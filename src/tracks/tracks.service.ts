@@ -44,9 +44,7 @@ export class TracksService {
   async update(id: string, updateTrackDto: UpdateTrackDto) {
     const track = await this.findOne(id);
 
-    const updatedATrack = { ...track, ...updateTrackDto };
-
-    return await this.tracksRepository.save(updatedATrack);
+    return await this.tracksRepository.save({ ...track, ...updateTrackDto });
   }
 
   async remove(trackId: string) {

@@ -1,0 +1,82 @@
+version: '3.8'
+
+networks:
+  app_db_bridge:
+
+services:
+  db-dev:
+    build: ./db
+    networks:
+      - app_db_bridge
+    env_file: .env
+    restart: always
+
+  db-prod:
+    build: ./db
+    networks:
+      - app_db_bridge
+    env_file: .env
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    command: postgres -c logging_collector=on -c log_directory=. -c log_filename=pg.log -c log_statement=all
+
+  app-dev:
+    build:
+      context: .
+      target: development
+    depends_on:
+      - db-dev
+    networks:
+      - app_db_bridge
+    ports:
+      - ${PORT}:${PORT}
+    env_file: .env
+    environment:
+      TYPEORM_HOST: db-dev
+    volumes:
+      - .:/app
+
+  migration:
+    build:
+      context: .
+      target: migration
+    depends_on:
+      - db-prod
+    networks:
+      - app_db_bridge
+    env_file: .env
+    environment:
+      TYPEORM_HOST: db-prod
+
+  migration-gen:
+    build:
+      context: .
+      target: migration-gen
+    depends_on:
+      - db-dev
+    networks:
+      - app_db_bridge
+    env_file: .env
+    environment:
+      TYPEORM_HOST: db-dev
+    volumes:
+      - .:/app
+
+  app-prod:
+    build:
+      context: .
+      target: production
+    depends_on:
+      - db-prod
+      - migration
+    networks:
+      - app_db_bridge
+    ports:
+      - ${PORT}:${PORT}
+    env_file: .env
+    environment:
+      TYPEORM_HOST: db-prod
+
+volumes:
+  pgdata:

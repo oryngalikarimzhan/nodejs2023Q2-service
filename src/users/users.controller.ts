@@ -32,7 +32,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { User } from './entities/user.entity';
 import { UserApiParamOptions, UserSchemaUpdated } from './users.utils';
-import { ResponseDescriptions } from '../app.utils';
+import { ResponseDescription } from '../app.utils';
 
 @ApiTags('User')
 @UseInterceptors(ClassSerializerInterceptor)
@@ -43,13 +43,11 @@ export class UsersController {
   @Get()
   @ApiOperation({ summary: 'Gets all users' })
   @ApiOkResponse({
-    description: ResponseDescriptions.SUCCESS_OPERATION,
+    ...ResponseDescription.SUCCESS_OPERATION,
     type: User,
     isArray: true,
   })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
   findAll() {
     return this.usersService.findAll();
   }
@@ -58,14 +56,12 @@ export class UsersController {
   @ApiParam(UserApiParamOptions)
   @ApiOperation({ summary: 'Get single user by ID' })
   @ApiOkResponse({
-    description: ResponseDescriptions.SUCCESS_OPERATION,
+    ...ResponseDescription.SUCCESS_OPERATION,
     type: User,
   })
-  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
-  @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
+  @ApiBadRequestResponse(ResponseDescription.INVALID_ID)
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
+  @ApiNotFoundResponse(ResponseDescription.NOT_FOUND)
   findOne(@Param('userId', ParseUUIDPipe) userId: string) {
     return this.usersService.findOne(userId);
   }
@@ -80,10 +76,8 @@ export class UsersController {
     description: 'The user has been created',
     type: User,
   })
-  @ApiBadRequestResponse({ description: ResponseDescriptions.BODY_NOT_FULL })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
+  @ApiBadRequestResponse(ResponseDescription.BODY_NOT_FULL)
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
   @ApiForbiddenResponse({ description: 'User with this login already exists' })
   create(@Body(ValidationPipe) createUserDto: CreateUserDto) {
     return this.usersService.create(createUserDto);
@@ -97,19 +91,17 @@ export class UsersController {
   })
   @ApiOperation({ summary: "Update a user's password by ID" })
   @ApiOkResponse({
-    description: ResponseDescriptions.SUCCESS_OPERATION,
+    ...ResponseDescription.SUCCESS_OPERATION,
     schema: UserSchemaUpdated,
   })
   @ApiBadRequestResponse({
-    description: `${ResponseDescriptions.INVALID_ID} or 
-      ${ResponseDescriptions.BODY_NOT_FULL} or 
+    description: `${ResponseDescription.INVALID_ID.description} or 
+      ${ResponseDescription.BODY_NOT_FULL.description} or 
       oldPassword and newPassword are the same`,
   })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
   @ApiForbiddenResponse({ description: 'oldPassword is wrong' })
-  @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
+  @ApiNotFoundResponse(ResponseDescription.NOT_FOUND)
   update(
     @Param('userId', ParseUUIDPipe) userId: string,
     @Body(ValidationPipe) updatePasswordDto: UpdateUserPasswordDto,
@@ -122,11 +114,9 @@ export class UsersController {
   @ApiOperation({ summary: 'Deletes user by ID' })
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiNoContentResponse({ description: 'The user has been deleted' })
-  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
-  @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
+  @ApiBadRequestResponse(ResponseDescription.INVALID_ID)
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
+  @ApiNotFoundResponse(ResponseDescription.NOT_FOUND)
   remove(@Param('userId', ParseUUIDPipe) userId: string) {
     return this.usersService.remove(userId);
   }

@@ -27,7 +27,7 @@ import {
 import { TracksService } from './tracks.service';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { ResponseDescriptions } from '../app.utils';
+import { ResponseDescription } from '../app.utils';
 import { Track } from './entities/track.entity';
 import {
   TrackApiParamOptions,
@@ -43,13 +43,11 @@ export class TracksController {
   @Get()
   @ApiOperation({ summary: 'Gets all library tracks list' })
   @ApiOkResponse({
-    description: ResponseDescriptions.SUCCESS_OPERATION,
+    ...ResponseDescription.SUCCESS_OPERATION,
     type: Track,
     isArray: true,
   })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
   findAll() {
     return this.tracksService.findAll();
   }
@@ -58,14 +56,12 @@ export class TracksController {
   @ApiParam(TrackApiParamOptions)
   @ApiOperation({ summary: 'Gets single track by id' })
   @ApiOkResponse({
-    description: ResponseDescriptions.SUCCESS_OPERATION,
+    ...ResponseDescription.SUCCESS_OPERATION,
     type: Track,
   })
-  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
-  @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
+  @ApiBadRequestResponse(ResponseDescription.INVALID_ID)
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
+  @ApiNotFoundResponse(ResponseDescription.NOT_FOUND)
   findOne(@Param('trackId', ParseUUIDPipe) trackId: string) {
     return this.tracksService.findOne(trackId);
   }
@@ -80,10 +76,8 @@ export class TracksController {
     description: 'The track has been created',
     type: Track,
   })
-  @ApiBadRequestResponse({ description: ResponseDescriptions.BODY_NOT_FULL })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
+  @ApiBadRequestResponse(ResponseDescription.BODY_NOT_FULL)
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
   create(@Body(ValidationPipe) createTrackDto: CreateTrackDto) {
     return this.tracksService.create(createTrackDto);
   }
@@ -98,14 +92,12 @@ export class TracksController {
   })
   @ApiOperation({ summary: 'Update library track information by ID' })
   @ApiOkResponse({
-    description: ResponseDescriptions.SUCCESS_OPERATION,
+    ...ResponseDescription.SUCCESS_OPERATION,
     schema: TrackSchemaUpdated,
   })
-  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
-  @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
+  @ApiBadRequestResponse(ResponseDescription.INVALID_ID)
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
+  @ApiNotFoundResponse(ResponseDescription.NOT_FOUND)
   update(
     @Param('trackId', ParseUUIDPipe) trackId: string,
     @Body(ValidationPipe) updateTrackDto: UpdateTrackDto,
@@ -118,11 +110,9 @@ export class TracksController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete track from library by ID' })
   @ApiNoContentResponse({ description: 'The track has been deleted' })
-  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
-  @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
+  @ApiBadRequestResponse(ResponseDescription.INVALID_ID)
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
+  @ApiNotFoundResponse(ResponseDescription.NOT_FOUND)
   remove(@Param('trackId', ParseUUIDPipe) trackId: string) {
     return this.tracksService.remove(trackId);
   }

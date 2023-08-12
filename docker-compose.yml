@@ -2,26 +2,32 @@ version: '3.8'
 
 networks:
   app_db_bridge:
+    name: app_db_bridge
 
 services:
   db-dev:
+    container_name: homelib-dbdev
+    image: oryngali96/homelib-dbdev
     build: ./db
     networks:
       - app_db_bridge
-    env_file: .env
-    restart: always
-
-  db-prod:
-    build: ./db
-    networks:
-      - app_db_bridge
-    env_file: .env
     restart: always
     volumes:
-      - pgdata:/var/lib/postgresql/data
-    command: postgres -c logging_collector=on -c log_directory=. -c log_filename=pg.log -c log_statement=all
+      - ./db/dbdata-dev:/var/lib/postgresql/data
+
+  db-prod:
+    container_name: homelib-db
+    image: oryngali96/homelib-db
+    build: ./db
+    networks:
+      - app_db_bridge
+    restart: always
+    volumes:
+      - dbdata:/var/lib/postgresql/data
 
   app-dev:
+    container_name: homelib-appdev
+    image: oryngali96/homelib-appdev
     build:
       context: .
       target: development
@@ -38,6 +44,8 @@ services:
       - .:/app
 
   migration:
+    container_name: homelib-app-migration
+    image: oryngali96/homelib-app-migration
     build:
       context: .
       target: migration
@@ -50,6 +58,8 @@ services:
       TYPEORM_HOST: db-prod
 
   migration-gen:
+    container_name: homelib-app-migration-gen
+    image: oryngali96/homelib-app-migration-gen
     build:
       context: .
       target: migration-gen
@@ -64,6 +74,8 @@ services:
       - .:/app
 
   app-prod:
+    container_name: homelib-app
+    image: oryngali96/homelib-app
     build:
       context: .
       target: production
@@ -79,4 +91,5 @@ services:
       TYPEORM_HOST: db-prod
 
 volumes:
-  pgdata:
+  dbdata:
+    name: dbdata

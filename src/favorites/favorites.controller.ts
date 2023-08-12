@@ -23,7 +23,7 @@ import {
 
 import { FavoritesService } from './favorites.service';
 import { Favorites } from './dto/favorites.dto';
-import { ResponseDescriptions } from '../app.utils';
+import { ResponseDescription } from '../app.utils';
 import { FavoritesApiParamOptions } from './favorites.utils';
 
 @ApiTags('Favorites')
@@ -34,9 +34,7 @@ export class FavoritesController {
   @Get()
   @ApiOperation({ summary: 'Get all favorites' })
   @ApiOkResponse({ type: Favorites, description: 'Successful operation' })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
   findAll() {
     return this.favoritesService.findAll();
   }
@@ -45,10 +43,8 @@ export class FavoritesController {
   @ApiParam(FavoritesApiParamOptions)
   @ApiOperation({ summary: 'Add track to the favorites' })
   @ApiCreatedResponse({ description: 'Added successfully' })
-  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
+  @ApiBadRequestResponse(ResponseDescription.INVALID_ID)
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
   @ApiUnprocessableEntityResponse({
     description: "Track with id doesn't exist",
   })
@@ -60,10 +56,8 @@ export class FavoritesController {
   @ApiParam(FavoritesApiParamOptions)
   @ApiOperation({ summary: 'Delete track from favorites' })
   @ApiNoContentResponse({ description: 'Deleted successfully' })
-  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
+  @ApiBadRequestResponse(ResponseDescription.INVALID_ID)
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
   @ApiNotFoundResponse({ description: 'Track was not found' })
   @HttpCode(HttpStatus.NO_CONTENT)
   deleteTrack(@Param('id', ParseUUIDPipe) id: string) {
@@ -75,10 +69,8 @@ export class FavoritesController {
   @ApiParam(FavoritesApiParamOptions)
   @ApiOperation({ summary: 'Add album to the favorites' })
   @ApiCreatedResponse({ description: 'Added successfully' })
-  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
+  @ApiBadRequestResponse(ResponseDescription.INVALID_ID)
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
   @ApiUnprocessableEntityResponse({
     description: "Album with id doesn't exist",
   })
@@ -90,10 +82,8 @@ export class FavoritesController {
   @ApiParam(FavoritesApiParamOptions)
   @ApiOperation({ summary: 'Delete album from favorites' })
   @ApiNoContentResponse({ description: 'Deleted successfully' })
-  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
+  @ApiBadRequestResponse(ResponseDescription.INVALID_ID)
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
   @ApiNotFoundResponse({ description: 'Album was not found' })
   @HttpCode(HttpStatus.NO_CONTENT)
   deleteAlbum(@Param('id', ParseUUIDPipe) id: string) {
@@ -105,10 +95,8 @@ export class FavoritesController {
   @ApiParam(FavoritesApiParamOptions)
   @ApiOperation({ summary: 'Add artist to the favorites' })
   @ApiCreatedResponse({ description: 'Added successfully' })
-  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
+  @ApiBadRequestResponse(ResponseDescription.INVALID_ID)
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
   @ApiUnprocessableEntityResponse({
     description: "Artist with id doesn't exist",
   })
@@ -120,10 +108,8 @@ export class FavoritesController {
   @ApiParam(FavoritesApiParamOptions)
   @ApiOperation({ summary: 'Delete artist from favorites' })
   @ApiNoContentResponse({ description: 'Deleted successfully' })
-  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
+  @ApiBadRequestResponse(ResponseDescription.INVALID_ID)
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
   @ApiNotFoundResponse({ description: 'Artist was not found' })
   @HttpCode(HttpStatus.NO_CONTENT)
   deleteArtist(@Param('id', ParseUUIDPipe) id: string) {

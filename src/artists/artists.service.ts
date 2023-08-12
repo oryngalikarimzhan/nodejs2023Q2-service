@@ -10,15 +10,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { Artist } from './entities/artist.entity';
-import { FavoritesService } from '../favorites/favorites.service';
 
 @Injectable()
 export class ArtistsService {
   constructor(
     @InjectRepository(Artist)
     private readonly artistsRepository: Repository<Artist>,
-    @Inject(forwardRef(() => FavoritesService))
-    private favoritesService: FavoritesService,
   ) {}
 
   async findOne(id: string) {

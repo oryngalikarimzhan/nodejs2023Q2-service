@@ -28,7 +28,7 @@ import { ArtistsService } from './artists.service';
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
 import { Artist } from './entities/artist.entity';
-import { ResponseDescriptions } from '../app.utils';
+import { ResponseDescription } from '../app.utils';
 import {
   ArtistApiParamOptions,
   ArtistBodyExamplesToUpdate,
@@ -43,13 +43,11 @@ export class ArtistsController {
   @Get()
   @ApiOperation({ summary: 'Gets all artists' })
   @ApiOkResponse({
-    description: ResponseDescriptions.SUCCESS_OPERATION,
+    ...ResponseDescription.SUCCESS_OPERATION,
     type: Artist,
     isArray: true,
   })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
   findAll() {
     return this.artistsService.findAll();
   }
@@ -58,14 +56,12 @@ export class ArtistsController {
   @ApiParam(ArtistApiParamOptions)
   @ApiOperation({ summary: 'Get single artist by ID' })
   @ApiOkResponse({
-    description: ResponseDescriptions.SUCCESS_OPERATION,
+    ...ResponseDescription.SUCCESS_OPERATION,
     type: Artist,
   })
-  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
-  @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
+  @ApiBadRequestResponse(ResponseDescription.INVALID_ID)
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
+  @ApiNotFoundResponse(ResponseDescription.NOT_FOUND)
   findOne(@Param('artistId', ParseUUIDPipe) artistId: string) {
     return this.artistsService.findOne(artistId);
   }
@@ -80,10 +76,8 @@ export class ArtistsController {
     description: 'The user has been created',
     type: Artist,
   })
-  @ApiBadRequestResponse({ description: ResponseDescriptions.BODY_NOT_FULL })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
+  @ApiBadRequestResponse(ResponseDescription.BODY_NOT_FULL)
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
   create(@Body(ValidationPipe) createArtistDto: CreateArtistDto) {
     return this.artistsService.create(createArtistDto);
   }
@@ -98,14 +92,12 @@ export class ArtistsController {
   })
   @ApiOperation({ summary: 'Update artist information by ID' })
   @ApiOkResponse({
-    description: ResponseDescriptions.SUCCESS_OPERATION,
+    ...ResponseDescription.SUCCESS_OPERATION,
     schema: ArtistSchemaUpdated,
   })
-  @ApiBadRequestResponse({ description: `${ResponseDescriptions.INVALID_ID}` })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
-  @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
+  @ApiBadRequestResponse(ResponseDescription.INVALID_ID)
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
+  @ApiNotFoundResponse(ResponseDescription.NOT_FOUND)
   update(
     @Param('artistId', ParseUUIDPipe) artistId: string,
     @Body(ValidationPipe) updateArtistDto: UpdateArtistDto,
@@ -118,11 +110,9 @@ export class ArtistsController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete artist by ID from library' })
   @ApiNoContentResponse({ description: 'The artist has been deleted' })
-  @ApiBadRequestResponse({ description: ResponseDescriptions.INVALID_ID })
-  @ApiUnauthorizedResponse({
-    description: ResponseDescriptions.NO_ACCESS_TOKEN,
-  })
-  @ApiNotFoundResponse({ description: ResponseDescriptions.NOT_FOUND })
+  @ApiBadRequestResponse(ResponseDescription.INVALID_ID)
+  @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
+  @ApiNotFoundResponse(ResponseDescription.NOT_FOUND)
   remove(@Param('artistId', ParseUUIDPipe) artistId: string) {
     return this.artistsService.remove(artistId);
   }

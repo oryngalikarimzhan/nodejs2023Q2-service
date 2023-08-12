@@ -20,7 +20,12 @@
     "typeorm": "npx ts-node --require tsconfig-paths/register ./node_modules/typeorm/cli -d ./db/data-source.ts",
     "migration:generate": "npm run typeorm migration:generate",
     "migration:run": "npm run typeorm migration:run",
-    "migration:revert": "npm run typeorm migration:revert"
+    "migration:revert": "npm run typeorm migration:revert",
+    "docker:dev": "docker compose up app-dev",
+    "docker:prod": "docker compose up app-prod",
+    "docker:migration:gen": "docker compose up migration:gen",
+    "docker:down": "docker compose down && docker volume prune",
+    "docker:build:push": "docker compose build --no-cache --push"
   },
   "dependencies": {
     "@nestjs/common": "^8.0.0",

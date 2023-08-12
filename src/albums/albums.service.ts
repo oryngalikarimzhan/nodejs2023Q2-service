@@ -1,24 +1,16 @@
-import {
-  Inject,
-  Injectable,
-  NotFoundException,
-  forwardRef,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
 import { Album } from './entities/album.entity';
-import { FavoritesService } from '../favorites/favorites.service';
 
 @Injectable()
 export class AlbumsService {
   constructor(
     @InjectRepository(Album)
     private readonly albumsRepository: Repository<Album>,
-    @Inject(forwardRef(() => FavoritesService))
-    private favoritesService: FavoritesService,
   ) {}
 
   async findAll() {

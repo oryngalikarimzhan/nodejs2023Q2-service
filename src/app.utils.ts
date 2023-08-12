@@ -8,10 +8,12 @@ export const getApiParamWithUUIDOptions = (name: string) => ({
 
 export const randomID = randomUUID();
 
-export enum ResponseDescriptions {
-  SUCCESS_OPERATION = 'Successful operation',
-  NO_ACCESS_TOKEN = 'Access token is missing or invalid',
-  INVALID_ID = 'id is invalid (not uuid)',
-  NOT_FOUND = 'Not found',
-  BODY_NOT_FULL = 'Body object does not contain required fields',
-}
+export const ResponseDescription = {
+  SUCCESS_OPERATION: { description: 'Successful operation' },
+  NO_ACCESS_TOKEN: { description: 'Access token is missing or invalid' },
+  INVALID_ID: { description: 'id is invalid (not uuid)' },
+  NOT_FOUND: { description: 'Not found' },
+  BODY_NOT_FULL: {
+    description: 'Body object does not contain required fields',
+  },
+};

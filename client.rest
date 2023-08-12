@@ -1,3 +1,4 @@
+#? VS Code REST Client extension 
 ###################################################################################################
 @hostname = localhost
 @port = 4000
@@ -177,6 +178,3 @@ POST http://{{host}}/favs/artist/{{artistid}} HTTP/1.1
 DELETE  http://{{host}}/favs/artist/{{artistid}} HTTP/1.1
 
 
-
-
-docker scout quickview node:current-alpine

@@ -39,7 +39,7 @@ npm start
 
 ### Generate migration
 
-- Only if _PostgreSQL_ is installed in your local machine
+- only if _PostgreSQL_ is installed in your local machine
 
 ```
 npm run migration:generate -- db/migrations/{migration_file_name}
@@ -58,7 +58,7 @@ npm run migration:run
 ### Development mode
 
 ```
-docker compose up --build app-dev
+npm run docker:dev
 ```
 
 ### Production mode
@@ -66,15 +66,27 @@ docker compose up --build app-dev
 - in _production_ mode migration will be automatically executed and migrated all existing migrations inside 'db/migrations' folder
 
 ```
-docker compose up --build app-prod
+npm run docker:prod
 ```
 
 ### Generating migration with docker
 
-- if you did not installed _PostgreSQL_ in you local machine, you can generate the migration after running the docker in [_development_](#development-mode) mode
+- if you did not install _PostgreSQL_ in your local machine, you can generate the migration after running the server with docker in [_development_](#development-mode) mode
 
 ```
-docker compose up --build migration:gen
+npm run docker:migration:gen
+```
+
+### Stop and clear docker containers
+
+```
+npm run docker:down
+```
+
+### Scan docker image
+
+```
+docker scout quickview {username}/{image_name}:{tag} | {image_name}:{tag}
 ```
 
 ---

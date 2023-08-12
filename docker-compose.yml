@@ -1,8 +1,8 @@
 version: '3.8'
 
 networks:
-  app_db_bridge:
-    name: app_db_bridge
+  homelib_bridge:
+    name: homelib_bridge
 
 services:
   # DEVELOPMENT
@@ -15,7 +15,7 @@ services:
     depends_on:
       - db-dev
     networks:
-      - app_db_bridge
+      - homelib_bridge
     ports:
       - ${PORT}:${PORT}
     env_file: .env
@@ -29,7 +29,7 @@ services:
     image: oryngali96/homelib-db:dev
     build: ./db
     networks:
-      - app_db_bridge
+      - homelib_bridge
     restart: always
     env_file: .env
     volumes:
@@ -44,7 +44,7 @@ services:
     depends_on:
       - db-dev
     networks:
-      - app_db_bridge
+      - homelib_bridge
     env_file: .env
     environment:
       DB_HOST: db-dev
@@ -62,7 +62,7 @@ services:
       - db-prod
       - migration
     networks:
-      - app_db_bridge
+      - homelib_bridge
     ports:
       - ${PORT}:${PORT}
     env_file: .env
@@ -74,7 +74,7 @@ services:
     image: oryngali96/homelib-db:prod
     build: ./db
     networks:
-      - app_db_bridge
+      - homelib_bridge
     restart: always
     env_file: .env
     volumes:
@@ -89,7 +89,7 @@ services:
     depends_on:
       - db-prod
     networks:
-      - app_db_bridge
+      - homelib_bridge
     env_file: .env
     environment:
       DB_HOST: db-prod

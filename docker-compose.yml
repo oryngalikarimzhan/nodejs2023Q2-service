@@ -5,29 +5,10 @@ networks:
     name: app_db_bridge
 
 services:
-  db-dev:
-    container_name: homelib-dbdev
-    image: oryngali96/homelib-dbdev
-    build: ./db
-    networks:
-      - app_db_bridge
-    restart: always
-    volumes:
-      - ./db/dbdata-dev:/var/lib/postgresql/data
-
-  db-prod:
-    container_name: homelib-db
-    image: oryngali96/homelib-db
-    build: ./db
-    networks:
-      - app_db_bridge
-    restart: always
-    volumes:
-      - dbdata:/var/lib/postgresql/data
-
+  # DEVELOPMENT
   app-dev:
-    container_name: homelib-appdev
-    image: oryngali96/homelib-appdev
+    container_name: homelib-app-dev
+    image: oryngali96/homelib-app:dev
     build:
       context: .
       target: development
@@ -39,27 +20,24 @@ services:
       - ${PORT}:${PORT}
     env_file: .env
     environment:
-      TYPEORM_HOST: db-dev
+      DB_HOST: db-dev
     volumes:
       - .:/app
 
-  migration:
-    container_name: homelib-app-migration
-    image: oryngali96/homelib-app-migration
-    build:
-      context: .
-      target: migration
-    depends_on:
-      - db-prod
+  db-dev:
+    container_name: homelib-db-dev
+    image: oryngali96/homelib-db:dev
+    build: ./db
     networks:
       - app_db_bridge
+    restart: always
     env_file: .env
-    environment:
-      TYPEORM_HOST: db-prod
+    volumes:
+      - ./db/dbdata-dev:/var/lib/postgresql/data
 
   migration-gen:
-    container_name: homelib-app-migration-gen
-    image: oryngali96/homelib-app-migration-gen
+    container_name: homelib-app-dev-migration-gen
+    image: oryngali96/homelib-app:dev-migration-gen
     build:
       context: .
       target: migration-gen
@@ -69,13 +47,14 @@ services:
       - app_db_bridge
     env_file: .env
     environment:
-      TYPEORM_HOST: db-dev
+      DB_HOST: db-dev
     volumes:
       - .:/app
 
+  # PRODUCTION
   app-prod:
-    container_name: homelib-app
-    image: oryngali96/homelib-app
+    container_name: homelib-app-prod
+    image: oryngali96/homelib-app:prod
     build:
       context: .
       target: production
@@ -88,7 +67,32 @@ services:
       - ${PORT}:${PORT}
     env_file: .env
     environment:
-      TYPEORM_HOST: db-prod
+      DB_HOST: db-prod
+
+  db-prod:
+    container_name: homelib-db-prod
+    image: oryngali96/homelib-db:prod
+    build: ./db
+    networks:
+      - app_db_bridge
+    restart: always
+    env_file: .env
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+
+  migration:
+    container_name: homelib-app-prod-migration
+    image: oryngali96/homelib-app:prod-migration
+    build:
+      context: .
+      target: migration
+    depends_on:
+      - db-prod
+    networks:
+      - app_db_bridge
+    env_file: .env
+    environment:
+      DB_HOST: db-prod
 
 volumes:
   dbdata:

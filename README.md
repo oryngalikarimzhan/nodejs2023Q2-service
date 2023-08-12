@@ -89,6 +89,12 @@ npm run docker:down
 docker scout quickview {username}/{image_name}:{tag} | {image_name}:{tag}
 ```
 
+or use npm script that scans main images
+
+```
+npm run docker:scan
+```
+
 ---
 
 # OpenApi Specification explorer

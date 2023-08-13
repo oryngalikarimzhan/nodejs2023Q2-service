@@ -35,20 +35,6 @@ services:
     env_file: .env
     volumes:
       - ./db/dbdata-dev:/var/lib/postgresql/data
-    healthcheck:
-      test:
-        [
-          'CMD',
-          'pg_isready',
-          '-d',
-          '${POSTGRES_DB}',
-          '-p',
-          '${DB_PORT}',
-          '-U',
-          '${POSTGRES_USER}',
-        ]
-      interval: 10s
-      retries: 5
 
   migration-gen:
     container_name: homelib-app-dev-migration-gen
@@ -95,20 +81,6 @@ services:
     env_file: .env
     volumes:
       - dbdata:/var/lib/postgresql/data
-    healthcheck:
-      test:
-        [
-          'CMD',
-          'pg_isready',
-          '-d',
-          '${POSTGRES_DB}',
-          '-p',
-          '${DB_PORT}',
-          '-U',
-          '${POSTGRES_USER}',
-        ]
-      interval: 10s
-      retries: 5
 
 volumes:
   dbdata:

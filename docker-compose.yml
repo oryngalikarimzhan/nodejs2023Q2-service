@@ -13,7 +13,8 @@ services:
       context: .
       target: development
     depends_on:
-      - db-dev
+      db-dev:
+        condition: service_healthy
     networks:
       - homelib_bridge
     ports:
@@ -34,6 +35,20 @@ services:
     env_file: .env
     volumes:
       - ./db/dbdata-dev:/var/lib/postgresql/data
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'pg_isready',
+          '-d',
+          '${POSTGRES_DB}',
+          '-p',
+          '${DB_PORT}',
+          '-U',
+          '${POSTGRES_USER}',
+        ]
+      interval: 10s
+      retries: 5
 
   migration-gen:
     container_name: homelib-app-dev-migration-gen
@@ -42,7 +57,8 @@ services:
       context: .
       target: migration-gen
     depends_on:
-      - db-dev
+      db-dev:
+        condition: service_healthy
     networks:
       - homelib_bridge
     env_file: .env
@@ -59,8 +75,8 @@ services:
       context: .
       target: production
     depends_on:
-      - db-prod
-      - migration
+      db-prod:
+        condition: service_healthy
     networks:
       - homelib_bridge
     ports:
@@ -79,20 +95,20 @@ services:
     env_file: .env
     volumes:
       - dbdata:/var/lib/postgresql/data
-
-  migration:
-    container_name: homelib-app-prod-migration
-    image: oryngali96/homelib-app:prod-migration
-    build:
-      context: .
-      target: migration
-    depends_on:
-      - db-prod
-    networks:
-      - homelib_bridge
-    env_file: .env
-    environment:
-      DB_HOST: db-prod
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'pg_isready',
+          '-d',
+          '${POSTGRES_DB}',
+          '-p',
+          '${DB_PORT}',
+          '-U',
+          '${POSTGRES_USER}',
+        ]
+      interval: 10s
+      retries: 5
 
 volumes:
   dbdata:

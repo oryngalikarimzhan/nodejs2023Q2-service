@@ -21,9 +21,9 @@
     "migration:generate": "npm run typeorm migration:generate",
     "migration:run": "npm run typeorm migration:run",
     "migration:revert": "npm run typeorm migration:revert",
-    "docker:dev": "docker-compose up app-dev",
+    "docker:dev": "docker-compose up --build app-dev",
     "docker:prod": "docker-compose up --build app-prod",
-    "docker:migration:gen": "docker-compose up migration-gen",
+    "docker:migration:gen": "docker-compose up --build migration-gen",
     "docker:down": "docker-compose down && docker volume prune",
     "docker:build:push": "docker-compose build --no-cache --push",
     "docker:scan": "docker scout quickview oryngali96/homelib-app:dev && docker scout quickview oryngali96/homelib-db:dev"

@@ -47,6 +47,8 @@ npm run migration:generate -- db/migrations/{migration_file_name}
 
 ### Run migration
 
+- only if _PostgreSQL_ is installed in your local machine
+
 ```
 npm run migration:run
 ```
@@ -63,7 +65,7 @@ npm run docker:dev
 
 ### Production mode
 
-- in _production_ mode migration will be automatically executed and migrated all existing migrations inside 'db/migrations' folder
+- in _production_ mode migration all migrations inside the folder 'db/migrations' will be automatically executed
 
 ```
 npm run docker:prod

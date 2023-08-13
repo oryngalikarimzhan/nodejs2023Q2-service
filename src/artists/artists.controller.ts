@@ -68,10 +68,7 @@ export class ArtistsController {
 
   @Post()
   @ApiOperation({ summary: 'Add new artist' })
-  @ApiBody({
-    required: true,
-    type: CreateArtistDto,
-  })
+  @ApiBody({ required: true, type: CreateArtistDto })
   @ApiCreatedResponse({
     description: 'The user has been created',
     type: Artist,

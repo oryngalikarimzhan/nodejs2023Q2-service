@@ -68,10 +68,7 @@ export class TracksController {
 
   @Post()
   @ApiOperation({ summary: 'Add new track' })
-  @ApiBody({
-    required: true,
-    type: CreateTrackDto,
-  })
+  @ApiBody({ required: true, type: CreateTrackDto })
   @ApiCreatedResponse({
     description: 'The track has been created',
     type: Track,

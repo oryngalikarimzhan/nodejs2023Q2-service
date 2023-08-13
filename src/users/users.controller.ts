@@ -67,10 +67,7 @@ export class UsersController {
   }
 
   @Post()
-  @ApiBody({
-    required: true,
-    type: CreateUserDto,
-  })
+  @ApiBody({ required: true, type: CreateUserDto })
   @ApiOperation({ summary: 'Creates a new user' })
   @ApiCreatedResponse({
     description: 'The user has been created',
@@ -85,10 +82,7 @@ export class UsersController {
 
   @Put(':userId')
   @ApiParam(UserApiParamOptions)
-  @ApiBody({
-    required: true,
-    type: UpdateUserPasswordDto,
-  })
+  @ApiBody({ required: true, type: UpdateUserPasswordDto })
   @ApiOperation({ summary: "Update a user's password by ID" })
   @ApiOkResponse({
     ...ResponseDescription.SUCCESS_OPERATION,

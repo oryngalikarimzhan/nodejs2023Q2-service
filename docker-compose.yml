@@ -4,8 +4,15 @@ networks:
   homelib_bridge:
     name: homelib_bridge
 
+volumes:
+  dbdata:
+    name: dbdata
+
 services:
+  #
   # DEVELOPMENT
+  #
+
   app-dev:
     container_name: homelib-app-dev
     image: oryngali96/homelib-app:dev
@@ -53,7 +60,10 @@ services:
     volumes:
       - .:/app
 
+  #
   # PRODUCTION
+  #
+
   app-prod:
     container_name: homelib-app-prod
     image: oryngali96/homelib-app:prod
@@ -81,7 +91,3 @@ services:
     env_file: .env
     volumes:
       - dbdata:/var/lib/postgresql/data
-
-volumes:
-  dbdata:
-    name: dbdata

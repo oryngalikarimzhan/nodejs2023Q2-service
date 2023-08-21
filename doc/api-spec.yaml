@@ -6,17 +6,17 @@ paths:
       summary: Gets all users
       parameters: []
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
-        '401':
+                  $ref: "#/components/schemas/User"
+        "401":
           description: Access token is missing or invalid
-      tags: &ref_0
+      tags: &a1
         - User
     post:
       operationId: UsersController_create
@@ -27,22 +27,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateUserDto'
+              $ref: "#/components/schemas/CreateUserDto"
       responses:
-        '201':
+        "201":
           description: The user has been created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '400':
+                $ref: "#/components/schemas/User"
+        "400":
           description: Body does not contain required fields
-        '401':
+        "401":
           description: Access token is missing or invalid
-        '403':
+        "403":
           description: User with this login already exists
-      tags: *ref_0
-  /user/{userId}:
+      tags: *a1
+  "/user/{userId}":
     get:
       operationId: UsersController_findOne
       summary: Get single user by ID
@@ -54,19 +54,19 @@ paths:
             format: uuid
             type: string
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '400':
+                $ref: "#/components/schemas/User"
+        "400":
           description: id is invalid (not uuid)
-        '401':
+        "401":
           description: Access token is missing or invalid
-        '404':
+        "404":
           description: Not found
-      tags: *ref_0
+      tags: *a1
     put:
       operationId: UsersController_update
       summary: Update a user's password by ID
@@ -82,9 +82,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdatePasswordDto'
+              $ref: "#/components/schemas/UpdatePasswordDto"
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -95,7 +95,7 @@ paths:
                   id:
                     type: string
                     format: uuid
-                    example: 0f3e20fc-f130-4a87-aa51-28906e9a15af
+                    example: 98555ff3-6770-40ed-bf5f-2344713cd3ec
                   login:
                     type: string
                     example: TestUser
@@ -108,19 +108,19 @@ paths:
                   updateAt:
                     type: integer
                     default: 1655999999
-        '400':
+        "400":
           description: |-
             id is invalid (not uuid) or 
                   Body does not contain required fields or 
                   Body is empty or 
                   oldPassword and newPassword are the same
-        '401':
+        "401":
           description: Access token is missing or invalid
-        '403':
+        "403":
           description: oldPassword is wrong
-        '404':
+        "404":
           description: Not found
-      tags: *ref_0
+      tags: *a1
     delete:
       operationId: UsersController_remove
       summary: Deletes user by ID
@@ -132,32 +132,32 @@ paths:
             format: uuid
             type: string
       responses:
-        '204':
+        "204":
           description: The user has been deleted
-        '400':
+        "400":
           description: id is invalid (not uuid)
-        '401':
+        "401":
           description: Access token is missing or invalid
-        '404':
+        "404":
           description: Not found
-      tags: *ref_0
+      tags: *a1
   /artist:
     get:
       operationId: ArtistsController_findAll
       summary: Gets all artists
       parameters: []
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Artist'
-        '401':
+                  $ref: "#/components/schemas/Artist"
+        "401":
           description: Access token is missing or invalid
-      tags: &ref_1
+      tags: &a2
         - Artist
     post:
       operationId: ArtistsController_create
@@ -168,20 +168,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateArtistDto'
+              $ref: "#/components/schemas/CreateArtistDto"
       responses:
-        '201':
+        "201":
           description: The user has been created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Artist'
-        '400':
+                $ref: "#/components/schemas/Artist"
+        "400":
           description: Body does not contain required fields
-        '401':
+        "401":
           description: Access token is missing or invalid
-      tags: *ref_1
-  /artist/{artistId}:
+      tags: *a2
+  "/artist/{artistId}":
     get:
       operationId: ArtistsController_findOne
       summary: Get single artist by ID
@@ -193,19 +193,19 @@ paths:
             format: uuid
             type: string
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Artist'
-        '400':
+                $ref: "#/components/schemas/Artist"
+        "400":
           description: id is invalid (not uuid)
-        '401':
+        "401":
           description: Access token is missing or invalid
-        '404':
+        "404":
           description: Not found
-      tags: *ref_1
+      tags: *a2
     put:
       operationId: ArtistsController_update
       summary: Update artist information by ID
@@ -222,7 +222,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateArtistDto'
+              $ref: "#/components/schemas/UpdateArtistDto"
             examples:
               full:
                 value:
@@ -232,7 +232,7 @@ paths:
                 value:
                   grammy: true
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -243,20 +243,20 @@ paths:
                   id:
                     type: string
                     format: uuid
-                    example: 0f3e20fc-f130-4a87-aa51-28906e9a15af
+                    example: 98555ff3-6770-40ed-bf5f-2344713cd3ec
                   name:
                     type: string
                     example: Freddie Mercury
                   grammy:
                     type: boolean
                     example: true
-        '400':
+        "400":
           description: id is invalid (not uuid) or Body is empty
-        '401':
+        "401":
           description: Access token is missing or invalid
-        '404':
+        "404":
           description: Not found
-      tags: *ref_1
+      tags: *a2
     delete:
       operationId: ArtistsController_remove
       summary: Delete artist by ID from library
@@ -268,32 +268,32 @@ paths:
             format: uuid
             type: string
       responses:
-        '204':
+        "204":
           description: The artist has been deleted
-        '400':
+        "400":
           description: id is invalid (not uuid)
-        '401':
+        "401":
           description: Access token is missing or invalid
-        '404':
+        "404":
           description: Not found
-      tags: *ref_1
+      tags: *a2
   /album:
     get:
       operationId: AlbumsController_findAll
       summary: Gets all albums
       parameters: []
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Album'
-        '401':
+                  $ref: "#/components/schemas/Album"
+        "401":
           description: Access token is missing or invalid
-      tags: &ref_2
+      tags: &a3
         - Album
     post:
       operationId: AlbumsController_create
@@ -304,20 +304,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateAlbumDto'
+              $ref: "#/components/schemas/CreateAlbumDto"
       responses:
-        '201':
+        "201":
           description: The album has been created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Album'
-        '400':
+                $ref: "#/components/schemas/Album"
+        "400":
           description: Body does not contain required fields
-        '401':
+        "401":
           description: Access token is missing or invalid
-      tags: *ref_2
-  /album/{albumId}:
+      tags: *a3
+  "/album/{albumId}":
     get:
       operationId: AlbumsController_findOne
       summary: Get single album by ID
@@ -329,19 +329,19 @@ paths:
             format: uuid
             type: string
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Album'
-        '400':
+                $ref: "#/components/schemas/Album"
+        "400":
           description: id is invalid (not uuid)
-        '401':
+        "401":
           description: Access token is missing or invalid
-        '404':
+        "404":
           description: Not found
-      tags: *ref_2
+      tags: *a3
     put:
       operationId: AlbumsController_update
       summary: Update album information by ID
@@ -358,18 +358,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateAlbumDto'
+              $ref: "#/components/schemas/UpdateAlbumDto"
             examples:
               full:
                 value:
                   name: Diamond
                   year: 2010
-                  artistId: dbc05a27-ee81-4dd6-8d8c-ad355a50cbbd
+                  artistId: d3fe6fad-5dba-4ab5-be5e-526c336d6114
               partial:
                 value:
                   name: Diamond
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -380,7 +380,7 @@ paths:
                   id:
                     type: string
                     format: uuid
-                    example: 0f3e20fc-f130-4a87-aa51-28906e9a15af
+                    example: 98555ff3-6770-40ed-bf5f-2344713cd3ec
                   name:
                     type: string
                     example: Diamond
@@ -390,14 +390,14 @@ paths:
                   artistId:
                     type: string
                     format: uuid
-                    example: dbc05a27-ee81-4dd6-8d8c-ad355a50cbbd
-        '400':
+                    example: d3fe6fad-5dba-4ab5-be5e-526c336d6114
+        "400":
           description: id is invalid (not uuid) or Body is empty
-        '401':
+        "401":
           description: Access token is missing or invalid
-        '404':
+        "404":
           description: Not found
-      tags: *ref_2
+      tags: *a3
     delete:
       operationId: AlbumsController_remove
       summary: Delete album by ID from library
@@ -409,32 +409,32 @@ paths:
             format: uuid
             type: string
       responses:
-        '204':
+        "204":
           description: The album has been deleted
-        '400':
+        "400":
           description: id is invalid (not uuid)
-        '401':
+        "401":
           description: Access token is missing or invalid
-        '404':
+        "404":
           description: Not found
-      tags: *ref_2
+      tags: *a3
   /favs:
     get:
       operationId: FavoritesController_findAll
       summary: Get all favorites
       parameters: []
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Favorites'
-        '401':
+                $ref: "#/components/schemas/Favorites"
+        "401":
           description: Access token is missing or invalid
-      tags: &ref_3
+      tags: &a4
         - Favorites
-  /favs/track/{id}:
+  "/favs/track/{id}":
     post:
       operationId: FavoritesController_addTrack
       summary: Add track to the favorites
@@ -446,15 +446,15 @@ paths:
             format: uuid
             type: string
       responses:
-        '201':
+        "201":
           description: Added successfully
-        '400':
+        "400":
           description: id is invalid (not uuid)
-        '401':
+        "401":
           description: Access token is missing or invalid
-        '422':
+        "422":
           description: Track with id doesn't exist
-      tags: *ref_3
+      tags: *a4
     delete:
       operationId: FavoritesController_deleteTrack
       summary: Delete track from favorites
@@ -466,16 +466,16 @@ paths:
             format: uuid
             type: string
       responses:
-        '204':
+        "204":
           description: Deleted successfully
-        '400':
+        "400":
           description: id is invalid (not uuid)
-        '401':
+        "401":
           description: Access token is missing or invalid
-        '404':
+        "404":
           description: Track was not found
-      tags: *ref_3
-  /favs/album/{id}:
+      tags: *a4
+  "/favs/album/{id}":
     post:
       operationId: FavoritesController_addAlbum
       summary: Add album to the favorites
@@ -487,15 +487,15 @@ paths:
             format: uuid
             type: string
       responses:
-        '201':
+        "201":
           description: Added successfully
-        '400':
+        "400":
           description: id is invalid (not uuid)
-        '401':
+        "401":
           description: Access token is missing or invalid
-        '422':
+        "422":
           description: Album with id doesn't exist
-      tags: *ref_3
+      tags: *a4
     delete:
       operationId: FavoritesController_deleteAlbum
       summary: Delete album from favorites
@@ -507,16 +507,16 @@ paths:
             format: uuid
             type: string
       responses:
-        '204':
+        "204":
           description: Deleted successfully
-        '400':
+        "400":
           description: id is invalid (not uuid)
-        '401':
+        "401":
           description: Access token is missing or invalid
-        '404':
+        "404":
           description: Album was not found
-      tags: *ref_3
-  /favs/artist/{id}:
+      tags: *a4
+  "/favs/artist/{id}":
     post:
       operationId: FavoritesController_addArtist
       summary: Add artist to the favorites
@@ -528,15 +528,15 @@ paths:
             format: uuid
             type: string
       responses:
-        '201':
+        "201":
           description: Added successfully
-        '400':
+        "400":
           description: id is invalid (not uuid)
-        '401':
+        "401":
           description: Access token is missing or invalid
-        '422':
+        "422":
           description: Artist with id doesn't exist
-      tags: *ref_3
+      tags: *a4
     delete:
       operationId: FavoritesController_deleteArtist
       summary: Delete artist from favorites
@@ -548,32 +548,32 @@ paths:
             format: uuid
             type: string
       responses:
-        '204':
+        "204":
           description: Deleted successfully
-        '400':
+        "400":
           description: id is invalid (not uuid)
-        '401':
+        "401":
           description: Access token is missing or invalid
-        '404':
+        "404":
           description: Artist was not found
-      tags: *ref_3
+      tags: *a4
   /track:
     get:
       operationId: TracksController_findAll
       summary: Gets all library tracks list
       parameters: []
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/Track'
-        '401':
+                  $ref: "#/components/schemas/Track"
+        "401":
           description: Access token is missing or invalid
-      tags: &ref_4
+      tags: &a5
         - Track
     post:
       operationId: TracksController_create
@@ -584,20 +584,20 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/CreateTrackDto'
+              $ref: "#/components/schemas/CreateTrackDto"
       responses:
-        '201':
+        "201":
           description: The track has been created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Track'
-        '400':
+                $ref: "#/components/schemas/Track"
+        "400":
           description: Body does not contain required fields
-        '401':
+        "401":
           description: Access token is missing or invalid
-      tags: *ref_4
-  /track/{trackId}:
+      tags: *a5
+  "/track/{trackId}":
     get:
       operationId: TracksController_findOne
       summary: Gets single track by id
@@ -609,19 +609,19 @@ paths:
             format: uuid
             type: string
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Track'
-        '400':
+                $ref: "#/components/schemas/Track"
+        "400":
           description: id is invalid (not uuid)
-        '401':
+        "401":
           description: Access token is missing or invalid
-        '404':
+        "404":
           description: Not found
-      tags: *ref_4
+      tags: *a5
     put:
       operationId: TracksController_update
       summary: Update library track information by ID
@@ -638,19 +638,19 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UpdateTrackDto'
+              $ref: "#/components/schemas/UpdateTrackDto"
             examples:
               full:
                 value:
                   name: The Show Must End
-                  artistId: 820fc5aa-2a24-4def-8041-56dfb07830b9
-                  albumId: c8a1c687-041f-4f3c-a3d1-a397a6675dc8
+                  artistId: f4adeed5-0f88-4987-b288-57922a9114c8
+                  albumId: 4c0cb5e6-9aff-45ff-a2d8-9da458946aa8
                   duration: 300
               partial:
                 value:
                   name: The Show Must End
       responses:
-        '200':
+        "200":
           description: Successful operation
           content:
             application/json:
@@ -661,28 +661,28 @@ paths:
                   id:
                     type: string
                     format: uuid
-                    example: 0f3e20fc-f130-4a87-aa51-28906e9a15af
+                    example: 98555ff3-6770-40ed-bf5f-2344713cd3ec
                   name:
                     type: string
                     example: The Show Must Go On
                   artistId:
                     type: string
                     format: uuid
-                    example: 820fc5aa-2a24-4def-8041-56dfb07830b9
+                    example: f4adeed5-0f88-4987-b288-57922a9114c8
                   albumId:
                     type: string
                     format: uuid
-                    example: c8a1c687-041f-4f3c-a3d1-a397a6675dc8
+                    example: 4c0cb5e6-9aff-45ff-a2d8-9da458946aa8
                   duration:
                     type: integer
                     example: 300
-        '400':
+        "400":
           description: id is invalid (not uuid) or Body is empty
-        '401':
+        "401":
           description: Access token is missing or invalid
-        '404':
+        "404":
           description: Not found
-      tags: *ref_4
+      tags: *a5
     delete:
       operationId: TracksController_remove
       summary: Delete track from library by ID
@@ -694,15 +694,15 @@ paths:
             format: uuid
             type: string
       responses:
-        '204':
+        "204":
           description: The track has been deleted
-        '400':
+        "400":
           description: id is invalid (not uuid)
-        '401':
+        "401":
           description: Access token is missing or invalid
-        '404':
+        "404":
           description: Not found
-      tags: *ref_4
+      tags: *a5
 info:
   title: Home Library Service
   description: Home music library service
@@ -902,15 +902,15 @@ components:
         artists:
           type: array
           items:
-            $ref: '#/components/schemas/Artist'
+            $ref: "#/components/schemas/Artist"
         albumsIds:
           type: array
           items:
-            $ref: '#/components/schemas/Album'
+            $ref: "#/components/schemas/Album"
         tracks:
           type: array
           items:
-            $ref: '#/components/schemas/Track'
+            $ref: "#/components/schemas/Track"
       required:
         - artists
         - albumsIds

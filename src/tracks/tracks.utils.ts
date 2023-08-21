@@ -1,10 +1,11 @@
-import { v4 } from 'uuid';
-import { getApiParamWithUUIDOptions, randomUUID } from '../app.utils';
+import { randomUUID } from 'crypto';
+
+import { getApiParamWithUUIDOptions, randomID } from '../app.utils';
 
 export const TrackApiParamOptions = getApiParamWithUUIDOptions('trackId');
 
-const artistRandomId = v4();
-const albumRandomId = v4();
+const artistRandomId = randomUUID();
+const albumRandomId = randomUUID();
 
 export const TrackSchemaUpdated = {
   type: 'object',
@@ -13,7 +14,7 @@ export const TrackSchemaUpdated = {
     id: {
       type: 'string',
       format: 'uuid',
-      example: randomUUID,
+      example: randomID,
     },
     name: {
       type: 'string',

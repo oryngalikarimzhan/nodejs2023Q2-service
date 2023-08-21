@@ -1,8 +1,11 @@
 import {
-  BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
+  forwardRef,
 } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateArtistDto } from './dto/create-artist.dto';
 import { UpdateArtistDto } from './dto/update-artist.dto';
@@ -10,14 +13,13 @@ import { Artist } from './entities/artist.entity';
 
 @Injectable()
 export class ArtistsService {
-  artists: Record<string, Artist> = {};
+  constructor(
+    @InjectRepository(Artist)
+    private readonly artistsRepository: Repository<Artist>,
+  ) {}
 
-  findAll() {
-    return Object.keys(this.artists).map((artistId) => this.artists[artistId]);
-  }
-
-  findOne(artistId: string) {
-    const artist = this.artists[artistId];
+  async findOne(id: string) {
+    const artist = await this.artistsRepository.findOneBy({ id });
 
     if (!artist) {
       throw new NotFoundException();
@@ -26,37 +28,27 @@ export class ArtistsService {
     return artist;
   }
 
-  create({ name, grammy }: CreateArtistDto) {
-    const artist = new Artist(name, grammy);
-    this.artists[artist.id] = artist;
-
-    return artist;
+  async findAll() {
+    return await this.artistsRepository.find();
   }
 
-  update(artistId: string, updateArtistDto: UpdateArtistDto) {
-    const hasProperties = Object.keys(updateArtistDto).length > 0;
+  async create(createUserDto: CreateArtistDto) {
+    const artist = this.artistsRepository.create(createUserDto);
 
-    if (!hasProperties) {
-      throw new BadRequestException(null, 'Body is empty');
+    return await this.artistsRepository.save(artist);
+  }
+
+  async update(artistId: string, updateArtistDto: UpdateArtistDto) {
+    const artist = await this.findOne(artistId);
+
+    return await this.artistsRepository.save({ ...artist, ...updateArtistDto });
+  }
+
+  async remove(artistId: string) {
+    const { affected } = await this.artistsRepository.delete(artistId);
+
+    if (affected === 0) {
+      throw new NotFoundException();
     }
-
-    const artist = this.findOne(artistId);
-
-    const updatedArtist = { ...artist, ...updateArtistDto };
-    this.artists[artistId] = updatedArtist;
-
-    return updatedArtist;
-  }
-
-  remove(artistId: string) {
-    const artist = this.findOne(artistId);
-
-    delete this.artists[artist.id];
-
-    return;
-  }
-
-  findArtistsByIds(artistsIds: string[]) {
-    return artistsIds.map((id) => this.artists[id]);
   }
 }

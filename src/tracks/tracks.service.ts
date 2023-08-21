@@ -1,8 +1,6 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
@@ -10,14 +8,17 @@ import { Track } from './entities/track.entity';
 
 @Injectable()
 export class TracksService {
-  tracks: Record<string, Track> = {};
+  constructor(
+    @InjectRepository(Track)
+    private readonly tracksRepository: Repository<Track>,
+  ) {}
 
-  findAll() {
-    return Object.keys(this.tracks).map((trackId) => this.tracks[trackId]);
+  async findAll() {
+    return await this.tracksRepository.find();
   }
 
-  findOne(trackId: string) {
-    const track = this.tracks[trackId];
+  async findOne(id: string) {
+    const track = await this.tracksRepository.findOneBy({ id });
 
     if (!track) {
       throw new NotFoundException();
@@ -26,53 +27,23 @@ export class TracksService {
     return track;
   }
 
-  create({ name, albumId, artistId, duration }: CreateTrackDto) {
-    const track = new Track(name, albumId, artistId, duration);
-    this.tracks[track.id] = track;
+  async create(createTrackDto: CreateTrackDto) {
+    const track = this.tracksRepository.create(createTrackDto);
 
-    return track;
+    return await this.tracksRepository.save(track);
   }
 
-  update(trackId: string, updateTrackDto: UpdateTrackDto) {
-    const hasProperties = Object.keys(updateTrackDto).length > 0;
+  async update(id: string, updateTrackDto: UpdateTrackDto) {
+    const track = await this.findOne(id);
 
-    if (!hasProperties) {
-      throw new BadRequestException(null, 'Body is empty');
+    return await this.tracksRepository.save({ ...track, ...updateTrackDto });
+  }
+
+  async remove(trackId: string) {
+    const { affected } = await this.tracksRepository.delete(trackId);
+
+    if (affected === 0) {
+      throw new NotFoundException();
     }
-
-    const track = this.findOne(trackId);
-
-    const updatedTrack = { ...track, ...updateTrackDto };
-    this.tracks[trackId] = updatedTrack;
-
-    return updatedTrack;
-  }
-
-  remove(trackId: string) {
-    const track = this.findOne(trackId);
-
-    delete this.tracks[track.id];
-
-    return;
-  }
-
-  findTrackByArtistId(artistId: string) {
-    const trackId = Object.keys(this.tracks).find(
-      (id) => this.tracks[id].artistId === artistId,
-    );
-
-    return this.tracks[trackId];
-  }
-
-  findTrackByAlbumId(albumId: string) {
-    const trackId = Object.keys(this.tracks).find(
-      (id) => this.tracks[id].albumId === albumId,
-    );
-
-    return this.tracks[trackId];
-  }
-
-  findTracksByIds(tracksIds: string[]) {
-    return tracksIds.map((id) => this.tracks[id]);
   }
 }

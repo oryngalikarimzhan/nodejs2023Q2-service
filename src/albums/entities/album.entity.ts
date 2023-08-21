@@ -1,40 +1,51 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
+import { Exclude } from 'class-transformer';
 import {
   IsInt,
+  IsNotEmpty,
   IsString,
   IsUUID,
-  Length,
   Max,
-  Min,
   ValidateIf,
 } from 'class-validator';
-import { v4 } from 'uuid';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
+import { Artist } from '../../artists/entities/artist.entity';
+
+@Entity('albums')
 export class Album {
+  @PrimaryGeneratedColumn('uuid')
   @IsUUID(4)
   @ApiProperty({ format: 'uuid' })
   id: string;
 
+  @Column()
   @IsString()
-  @Length(2)
+  @IsNotEmpty()
   @ApiProperty({ example: 'Innuendo' })
   name: string;
 
+  @Column()
   @IsInt()
-  @Min(1900)
   @Max(new Date().getFullYear())
   @ApiProperty({ example: 2020 })
   year: number;
 
+  @Column({ name: 'artist_id', default: null, type: 'uuid' })
   @IsUUID(4)
   @ValidateIf((_, value) => value !== null)
   @ApiProperty({ format: 'uuid' })
   artistId: string | null;
 
-  constructor(name: string, year: number, artistId: string | null) {
-    this.id = v4();
-    this.name = name;
-    this.year = year;
-    this.artistId = artistId;
-  }
+  @ManyToOne(() => Artist, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'artist_id' })
+  @Exclude()
+  @ApiHideProperty()
+  artist: Artist;
 }

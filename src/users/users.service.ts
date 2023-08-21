@@ -4,21 +4,26 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdatePasswordDto } from './dto/update-password.dto';
+import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
 import { User } from './entities/user.entity';
 
 @Injectable()
 export class UsersService {
-  users: Record<string, User> = {};
+  constructor(
+    @InjectRepository(User)
+    private readonly usersRepository: Repository<User>,
+  ) {}
 
-  findAll() {
-    return Object.keys(this.users).map((userId) => this.users[userId]);
+  async findAll() {
+    return await this.usersRepository.find();
   }
 
-  findOne(userId: string) {
-    const user = this.users[userId];
+  async findOne(id: string) {
+    const user = await this.usersRepository.findOneBy({ id });
 
     if (!user) {
       throw new NotFoundException();
@@ -27,55 +32,48 @@ export class UsersService {
     return user;
   }
 
-  create({ login, password }: CreateUserDto) {
-    const hasUser = !!Object.keys(this.users).find(
-      (userId) => this.users[userId].login === login,
-    );
+  async create(createUserDto: CreateUserDto) {
+    this.checkLoginExistence(createUserDto.login);
 
-    if (hasUser) {
-      throw new ForbiddenException(null, 'User with this login already exists');
-    }
+    const user = this.usersRepository.create(createUserDto);
 
-    const user = new User(login, password);
-    this.users[user.id] = user;
-
-    return user;
+    return await this.usersRepository.save(user);
   }
 
-  update(userId: string, updatePasswordDto: UpdatePasswordDto) {
-    const hasProperties = Object.keys(updatePasswordDto).length > 0;
-
-    if (!hasProperties) {
-      throw new BadRequestException(null, 'Body is empty');
-    }
-
-    const { oldPassword, newPassword } = updatePasswordDto;
-
-    const user = this.findOne(userId);
+  async update(
+    id: string,
+    { oldPassword, newPassword }: UpdateUserPasswordDto,
+  ) {
+    const user = await this.findOne(id);
 
     if (user.password !== oldPassword) {
-      throw new ForbiddenException(null, 'old password is wrong');
+      throw new ForbiddenException('old password is wrong');
     }
 
     if (oldPassword === newPassword) {
       throw new BadRequestException(
-        null,
         'old password and new password can not be the same',
       );
     }
 
     user.password = newPassword;
-    user.updatedAt = Date.now();
-    user.version += 1;
 
-    return user;
+    return this.usersRepository.save(user);
   }
 
-  remove(userId: string) {
-    const user = this.findOne(userId);
+  async remove(id: string) {
+    const { affected } = await this.usersRepository.delete(id);
 
-    delete this.users[user.id];
+    if (affected === 0) {
+      throw new NotFoundException();
+    }
+  }
 
-    return;
+  async checkLoginExistence(login: string) {
+    const user = await this.usersRepository.findOneBy({ login });
+
+    if (user) {
+      throw new ForbiddenException('User with this login already exists');
+    }
   }
 }

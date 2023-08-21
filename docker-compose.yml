@@ -1,0 +1,111 @@
+version: '3.8'
+
+networks:
+  homelib_bridge:
+    name: homelib_bridge
+
+volumes:
+  dbdata:
+    name: dbdata
+
+services:
+  #
+  # DEVELOPMENT
+  #
+
+  app-dev:
+    container_name: homelib-app-dev
+    image: oryngali96/homelib-app:dev
+    build:
+      context: .
+      target: development
+    depends_on:
+      db-dev:
+        condition: service_healthy
+    networks:
+      - homelib_bridge
+    ports:
+      - ${PORT}:${PORT}
+    env_file: .env
+    environment:
+      DB_HOST: db-dev
+    volumes:
+      - .:/app
+
+  db-dev:
+    container_name: homelib-db-dev
+    image: oryngali96/homelib-db:dev
+    build: ./db
+    networks:
+      - homelib_bridge
+    restart: always
+    env_file: .env
+    volumes:
+      - ./db/dbdata-dev:/var/lib/postgresql/data
+
+  migration-gen:
+    container_name: homelib-app-dev-migration-gen
+    image: oryngali96/homelib-app:dev-migration-gen
+    build:
+      context: .
+      target: migration-gen
+    depends_on:
+      db-dev:
+        condition: service_healthy
+    networks:
+      - homelib_bridge
+    env_file: .env
+    environment:
+      DB_HOST: db-dev
+    volumes:
+      - .:/app
+
+  #
+  # PRODUCTION
+  #
+
+  app-prod:
+    container_name: homelib-app-prod
+    image: oryngali96/homelib-app:prod
+    build:
+      context: .
+      target: production
+    env_file: .env
+    environment:
+      DB_HOST: db-prod
+    depends_on:
+      migration:
+        condition: service_completed_successfully
+      db-prod:
+        condition: service_healthy
+
+    networks:
+      - homelib_bridge
+    ports:
+      - ${PORT}:${PORT}
+
+  db-prod:
+    container_name: homelib-db-prod
+    image: oryngali96/homelib-db:prod
+    build: ./db
+    networks:
+      - homelib_bridge
+    restart: always
+    env_file: .env
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+
+  migration:
+    container_name: homelib-app-prod-migration
+    image: oryngali96/homelib-app:prod-migration
+    build:
+      context: .
+      target: migration
+    depends_on:
+      db-prod:
+        condition: service_healthy
+    networks:
+      - homelib_bridge
+    env_file: .env
+    environment:
+      DB_HOST: db-prod

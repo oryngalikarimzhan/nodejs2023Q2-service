@@ -1,54 +1,115 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
+
+import { InjectRepository } from '@nestjs/typeorm';
+import { FavoriteArtist } from './entities/favorite-artist.entity';
+import { Repository } from 'typeorm';
+import { FavoriteAlbum } from './entities/favorite-album.entity';
+import { FavoriteTrack } from './entities/favorite-track.entity';
 
 @Injectable()
 export class FavoritesService {
-  favorites: {
-    artistsIds: Set<string>;
-    albumsIds: Set<string>;
-    tracksIds: Set<string>;
-  } = {
-    artistsIds: new Set(),
-    albumsIds: new Set(),
-    tracksIds: new Set(),
-  };
+  constructor(
+    @InjectRepository(FavoriteArtist)
+    private readonly favoriteArtistsRepository: Repository<FavoriteArtist>,
+    @InjectRepository(FavoriteAlbum)
+    private readonly favoriteAlbumsRepository: Repository<FavoriteAlbum>,
+    @InjectRepository(FavoriteTrack)
+    private readonly favoriteTracksRepository: Repository<FavoriteTrack>,
+  ) {}
 
-  findAll() {
-    return this.favorites;
+  async findAll() {
+    const [favArtists, favAlbums, favTracks] = await Promise.all([
+      await this.favoriteArtistsRepository.find({ relations: ['artist'] }),
+      await this.favoriteAlbumsRepository.find({ relations: ['album'] }),
+      await this.favoriteTracksRepository.find({ relations: ['track'] }),
+    ]);
+
+    return {
+      artists: favArtists.map(({ artist }) => artist),
+      albums: favAlbums.map(({ album }) => album),
+      tracks: favTracks.map(({ track }) => track),
+    };
   }
 
-  addTrack(id: string) {
-    return this.favorites.tracksIds.add(id);
+  async addTrack(trackId: string) {
+    const favTrack = this.favoriteTracksRepository.create({ trackId });
+
+    try {
+      await this.favoriteTracksRepository.save(favTrack);
+    } catch (e) {
+      if (e.code && e.code === '23503') {
+        throw new UnprocessableEntityException(
+          'track with this id does not exists',
+        );
+      }
+
+      throw e;
+    }
   }
 
-  deleteTrack(id: string) {
-    return this.favorites.tracksIds.delete(id);
+  async deleteTrack(trackId: string) {
+    const { affected } = await this.favoriteTracksRepository.delete({
+      trackId,
+    });
+
+    if (affected === 0) {
+      throw new NotFoundException();
+    }
   }
 
-  addAlbum(id: string) {
-    return this.favorites.albumsIds.add(id);
+  async addAlbum(albumId: string) {
+    const favAlbum = this.favoriteAlbumsRepository.create({ albumId });
+
+    try {
+      await this.favoriteAlbumsRepository.save(favAlbum);
+    } catch (e) {
+      if (e.code && e.code === '23503') {
+        throw new UnprocessableEntityException(
+          'album with this id does not exists',
+        );
+      }
+
+      throw e;
+    }
   }
 
-  deleteAlbum(id: string) {
-    return this.favorites.albumsIds.delete(id);
+  async deleteAlbum(albumId: string) {
+    const { affected } = await this.favoriteAlbumsRepository.delete({
+      albumId,
+    });
+
+    if (affected === 0) {
+      throw new NotFoundException();
+    }
   }
 
-  addArtist(id: string) {
-    return this.favorites.artistsIds.add(id);
+  async addArtist(artistId: string) {
+    const favArtist = this.favoriteArtistsRepository.create({ artistId });
+
+    try {
+      await this.favoriteArtistsRepository.save(favArtist);
+    } catch (e) {
+      if (e.code && e.code === '23503') {
+        throw new UnprocessableEntityException(
+          'artist with this id does not exists',
+        );
+      }
+
+      throw e;
+    }
   }
 
-  deleteArtist(id: string) {
-    return this.favorites.artistsIds.delete(id);
-  }
+  async deleteArtist(artistId: string) {
+    const { affected } = await this.favoriteArtistsRepository.delete({
+      artistId,
+    });
 
-  isArtistExists(artistId: string) {
-    return this.favorites.artistsIds.has(artistId);
-  }
-
-  isAlbumExists(albumId: string) {
-    return this.favorites.albumsIds.has(albumId);
-  }
-
-  isTrackExists(trackId: string) {
-    return this.favorites.tracksIds.has(trackId);
+    if (affected === 0) {
+      throw new NotFoundException();
+    }
   }
 }

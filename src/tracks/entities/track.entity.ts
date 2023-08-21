@@ -1,49 +1,59 @@
 import { ApiProperty } from '@nestjs/swagger';
 import {
   IsInt,
+  IsNotEmpty,
   IsString,
   IsUUID,
-  Length,
   Min,
   ValidateIf,
 } from 'class-validator';
-import { v4 } from 'uuid';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
+import { Artist } from '../../artists/entities/artist.entity';
+import { Album } from '../../albums/entities/album.entity';
+
+@Entity('tracks')
 export class Track {
+  @PrimaryGeneratedColumn('uuid')
   @IsUUID(4)
   @ApiProperty({ format: 'uuid' })
   id: string;
 
+  @Column()
   @IsString()
-  @Length(3)
+  @IsNotEmpty()
   @ApiProperty({ example: 'The Show Must Go On' })
   name: string;
 
+  @Column({ name: 'artist_id', default: null, type: 'uuid' })
   @IsUUID(4)
   @ValidateIf((_, value) => value !== null)
   @ApiProperty({ format: 'uuid', nullable: true })
   artistId: string | null;
 
+  @Column({ name: 'album_id', default: null, type: 'uuid' })
   @IsUUID(4)
   @ValidateIf((_, value) => value !== null)
   @ApiProperty({ format: 'uuid', nullable: true })
   albumId: string | null;
 
+  @Column()
   @IsInt()
   @Min(1)
   @ApiProperty({ example: 262 })
   duration: number;
 
-  constructor(
-    name: string,
-    albumId: string | null,
-    artistId: string | null,
-    duration: number,
-  ) {
-    this.id = v4();
-    this.name = name;
-    this.albumId = albumId;
-    this.artistId = artistId;
-    this.duration = duration;
-  }
+  @ManyToOne(() => Artist, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'artist_id' })
+  artist: Artist;
+
+  @ManyToOne(() => Album, { onDelete: 'SET NULL' })
+  @JoinColumn({ name: 'album_id' })
+  album: Album;
 }

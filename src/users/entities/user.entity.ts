@@ -1,54 +1,44 @@
+import { IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { Exclude, Transform } from 'class-transformer';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import {
-  IsInt,
-  IsString,
-  IsUUID,
-  Length,
-  Min,
-  Validate,
-} from 'class-validator';
-import { Exclude } from 'class-transformer';
-import { v4 } from 'uuid';
-import { ApiProperty } from '@nestjs/swagger';
+  Column,
+  CreateDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+  VersionColumn,
+} from 'typeorm';
 
-import { TimestampValidator } from '../users.utils';
-
+@Entity('users')
 export class User {
+  @PrimaryGeneratedColumn('uuid')
   @IsUUID(4)
   @ApiProperty({ format: 'uuid' })
   id: string;
 
-  @Length(3)
+  @Column({ unique: true })
+  @IsNotEmpty()
   @IsString()
   @ApiProperty({ example: 'TestUser' })
   login: string;
 
-  @IsString()
-  @Length(5)
-  @Exclude()
+  @Column()
+  @Exclude({ toPlainOnly: true })
+  @ApiHideProperty()
   password: string;
 
-  @IsInt()
-  @Min(1)
+  @VersionColumn()
   @ApiProperty({ example: 1 })
   version: number;
 
-  @IsInt()
-  @Validate(TimestampValidator)
-  @ApiProperty({ example: 1655000000 })
-  createdAt: number;
+  @CreateDateColumn()
+  @ApiProperty({ example: 1655000000, type: Number })
+  @Transform(({ value }) => value.getTime(), { toPlainOnly: true })
+  createdAt: Date;
 
-  @IsInt()
-  @Validate(TimestampValidator)
-  @ApiProperty({ example: 1655000000 })
-  updatedAt: number;
-
-  constructor(login: string, password: string) {
-    this.id = v4();
-    this.login = login;
-    this.password = password;
-    this.version = 1;
-    const now = Date.now();
-    this.createdAt = now;
-    this.updatedAt = now;
-  }
+  @UpdateDateColumn()
+  @ApiProperty({ example: 1655000000, type: Number })
+  @Transform(({ value }) => value.getTime(), { toPlainOnly: true })
+  updatedAt: Date;
 }

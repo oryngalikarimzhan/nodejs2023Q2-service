@@ -1,24 +1,22 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsBoolean, IsString, IsUUID, Length } from 'class-validator';
-import { v4 } from 'uuid';
+import { IsBoolean, IsNotEmpty, IsString, IsUUID } from 'class-validator';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+@Entity('artists')
 export class Artist {
+  @PrimaryGeneratedColumn('uuid')
   @IsUUID(4)
   @ApiProperty({ format: 'uuid' })
   id: string;
 
+  @Column()
   @IsString()
-  @Length(2)
+  @IsNotEmpty()
   @ApiProperty({ example: 'Freddie Mercury' })
   name: string;
 
+  @Column()
   @IsBoolean()
   @ApiProperty({ example: false })
   grammy: boolean;
-
-  constructor(name: string, grammy: boolean) {
-    this.id = v4();
-    this.name = name;
-    this.grammy = grammy;
-  }
 }

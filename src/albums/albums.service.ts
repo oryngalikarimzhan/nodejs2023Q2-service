@@ -1,8 +1,6 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
 
 import { CreateAlbumDto } from './dto/create-album.dto';
 import { UpdateAlbumDto } from './dto/update-album.dto';
@@ -10,14 +8,17 @@ import { Album } from './entities/album.entity';
 
 @Injectable()
 export class AlbumsService {
-  albums: Record<string, Album> = {};
+  constructor(
+    @InjectRepository(Album)
+    private readonly albumsRepository: Repository<Album>,
+  ) {}
 
-  findAll() {
-    return Object.keys(this.albums).map((albumId) => this.albums[albumId]);
+  async findAll() {
+    return await this.albumsRepository.find();
   }
 
-  findOne(albumId: string) {
-    const album = this.albums[albumId];
+  async findOne(id: string) {
+    const album = await this.albumsRepository.findOneBy({ id });
 
     if (!album) {
       throw new NotFoundException();
@@ -26,45 +27,23 @@ export class AlbumsService {
     return album;
   }
 
-  create({ name, year, artistId }: CreateAlbumDto) {
-    const album = new Album(name, year, artistId);
-    this.albums[album.id] = album;
+  async create(createAlbumDto: CreateAlbumDto) {
+    const album = this.albumsRepository.create(createAlbumDto);
 
-    return album;
+    return await this.albumsRepository.save(album);
   }
 
-  update(albumId: string, updateAlbumDto: UpdateAlbumDto) {
-    const hasProperties = Object.keys(updateAlbumDto).length > 0;
+  async update(id: string, updateAlbumDto: UpdateAlbumDto) {
+    const album = await this.findOne(id);
 
-    if (!hasProperties) {
-      throw new BadRequestException(null, 'Body is empty');
+    return await this.albumsRepository.save({ ...album, ...updateAlbumDto });
+  }
+
+  async remove(albumId: string) {
+    const { affected } = await this.albumsRepository.delete(albumId);
+
+    if (affected === 0) {
+      throw new NotFoundException();
     }
-
-    const album = this.findOne(albumId);
-
-    const updatedAlbum = { ...album, ...updateAlbumDto };
-    this.albums[albumId] = updatedAlbum;
-
-    return updatedAlbum;
-  }
-
-  remove(albumId: string) {
-    this.findOne(albumId);
-
-    delete this.albums[albumId];
-
-    return;
-  }
-
-  findAlbumByArtistId(artistId: string) {
-    const albumId = Object.keys(this.albums).find(
-      (id) => this.albums[id].artistId === artistId,
-    );
-
-    return this.albums[albumId];
-  }
-
-  findAlbumsByIds(albumsIds: string[]) {
-    return albumsIds.map((id) => this.albums[id]);
   }
 }

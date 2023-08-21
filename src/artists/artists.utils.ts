@@ -1,4 +1,4 @@
-import { getApiParamWithUUIDOptions, randomUUID } from '../app.utils';
+import { getApiParamWithUUIDOptions, randomID } from '../app.utils';
 
 export const ArtistApiParamOptions = getApiParamWithUUIDOptions('artistId');
 
@@ -9,7 +9,7 @@ export const ArtistSchemaUpdated = {
     id: {
       type: 'string',
       format: 'uuid',
-      example: randomUUID,
+      example: randomID,
     },
     name: {
       type: 'string',

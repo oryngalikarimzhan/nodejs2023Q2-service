@@ -4,6 +4,8 @@ import { Track } from '../../tracks/entities/track.entity';
 
 export class Favorites {
   artists: Artist[];
+
   albumsIds: Album[];
+
   tracks: Track[];
 }

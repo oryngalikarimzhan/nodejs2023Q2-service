@@ -1,4 +1,4 @@
-import { v4 } from 'uuid';
+import { randomUUID } from 'crypto';
 
 export const getApiParamWithUUIDOptions = (name: string) => ({
   name,
@@ -6,13 +6,14 @@ export const getApiParamWithUUIDOptions = (name: string) => ({
   required: true,
 });
 
-export const randomUUID = v4();
+export const randomID = randomUUID();
 
-export enum EndpointResponseDescriptions {
-  SUCCESS_OPERATION = 'Successful operation',
-  ACCESS_TOKEN_MISSING = 'Access token is missing or invalid',
-  INVALID_ID = 'id is invalid (not uuid)',
-  NOT_FOUND = 'Not found',
-  BODY_NOT_FULL = 'Body does not contain required fields',
-  BODY_EMPTY = 'Body is empty',
-}
+export const ResponseDescription = {
+  SUCCESS_OPERATION: { description: 'Successful operation' },
+  NO_ACCESS_TOKEN: { description: 'Access token is missing or invalid' },
+  INVALID_ID: { description: 'id is invalid (not uuid)' },
+  NOT_FOUND: { description: 'Not found' },
+  BODY_NOT_FULL: {
+    description: 'Body object does not contain required fields',
+  },
+};

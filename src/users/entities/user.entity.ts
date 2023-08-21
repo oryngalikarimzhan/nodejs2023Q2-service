@@ -24,7 +24,7 @@ export class User {
   login: string;
 
   @Column()
-  @Exclude({ toPlainOnly: true })
+  @Exclude()
   @ApiHideProperty()
   password: string;
 
@@ -41,4 +41,8 @@ export class User {
   @ApiProperty({ example: 1655000000, type: Number })
   @Transform(({ value }) => value.getTime(), { toPlainOnly: true })
   updatedAt: Date;
+
+  @Column({ nullable: true, default: null })
+  @Exclude()
+  refreshToken: string | null;
 }

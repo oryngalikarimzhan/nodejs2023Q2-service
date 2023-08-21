@@ -31,6 +31,7 @@ services:
       DB_HOST: db-dev
     volumes:
       - .:/app
+      - /app/node_modules
 
   db-dev:
     container_name: homelib-db-dev
@@ -58,7 +59,7 @@ services:
     environment:
       DB_HOST: db-dev
     volumes:
-      - .:/app
+      - ./db/migrations:/app/db/migrations
 
   #
   # PRODUCTION

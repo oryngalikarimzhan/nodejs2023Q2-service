@@ -41,7 +41,7 @@ export class UsersService {
 
   async create(createUserDto: CreateUserDto) {
     const { login, password } = createUserDto;
-    this.checkLoginExistence(login);
+    await this.checkLoginExistence(login);
 
     const hashedPassword = await hash(
       password,

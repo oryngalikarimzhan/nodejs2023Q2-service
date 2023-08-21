@@ -72,6 +72,8 @@ services:
       context: .
       target: production
     depends_on:
+      migration:
+        condition: service_completed_successfully
       db-prod:
         condition: service_healthy
     networks:
@@ -92,3 +94,18 @@ services:
     env_file: .env
     volumes:
       - dbdata:/var/lib/postgresql/data
+
+  migration:
+    container_name: homelib-app-prod-migration
+    image: oryngali96/homelib-app:prod-migration
+    build:
+      context: .
+      target: migration
+    depends_on:
+      db-prod:
+        condition: service_healthy
+    networks:
+      - homelib_bridge
+    env_file: .env
+    environment:
+      DB_HOST: db-prod

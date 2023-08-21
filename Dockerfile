@@ -1,7 +1,7 @@
 FROM node:lts-alpine AS base
 WORKDIR /app
 COPY package*.json .
-RUN npm install --legacy-peer-deps && npm cache clean --force
+RUN npm install --legacy-peer-deps
 COPY . .
 
 # 
@@ -13,11 +13,20 @@ ENV NODE_ENV=development
 CMD ["npm", "run", "start:dev"]
 
 # 
-# Migration generating
+# Migration generating stage
 # 
 
 FROM base AS migration-gen
 CMD ["npm", "run", "migration:generate", "--", "db/migrations/migration"]
+
+
+# 
+# Migration running Stage
+# 
+
+FROM base AS migration
+CMD ["npm", "run", "migration:run"]
+
 
 # 
 # Production Stage
@@ -25,7 +34,6 @@ CMD ["npm", "run", "migration:generate", "--", "db/migrations/migration"]
 
 FROM base AS production
 RUN npm run build
-RUN npm run migration:run
 CMD ["npm", "run", "start:prod"]
 
 

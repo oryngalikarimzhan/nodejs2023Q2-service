@@ -119,6 +119,12 @@ After application running open new terminal and enter.
 npm run test
 ```
 
+Test authentication
+
+```
+npm run test:auth
+```
+
 ## Auto-fix and format
 
 ```

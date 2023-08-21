@@ -1,4 +1,4 @@
-FROM postgres:15-alpine
+FROM postgres:15.4-alpine
 
 HEALTHCHECK --interval=10s --timeout=5s --retries=5 \
   CMD pg_isready -d ${POSTGRES_DB} -p ${DB_PORT} -U ${POSTGRES_USER}

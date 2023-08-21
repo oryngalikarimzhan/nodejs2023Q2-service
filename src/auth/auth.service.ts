@@ -1,4 +1,8 @@
-import { ForbiddenException, Injectable } from '@nestjs/common';
+import {
+  ForbiddenException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { compare } from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 
@@ -7,6 +11,7 @@ import { ConfigService } from '@nestjs/config';
 import { AuthRefreshDto } from './dto/auth-refresh.dto';
 import { AuthSignupDto } from './dto/auth-signup.dto';
 import { AuthLoginDto } from './dto/auth-login.dto';
+import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -27,6 +32,20 @@ export class AuthService {
       throw new ForbiddenException('login or password is incorrect');
     }
 
+    return await this.createNewPairTokens(user);
+  }
+
+  async refresh(id: string, { refreshToken }: AuthRefreshDto) {
+    const user = await this.usersService.findOneById(id);
+
+    if (!user || user.refreshToken !== refreshToken) {
+      throw new UnauthorizedException();
+    }
+
+    return await this.createNewPairTokens(user);
+  }
+
+  async createNewPairTokens(user: User) {
     const payload = { id: user.id, login: user.login };
 
     const [accessToken, refreshToken] = await Promise.all([
@@ -43,9 +62,5 @@ export class AuthService {
     this.usersService.updateRefreshToken(user, refreshToken);
 
     return { accessToken, refreshToken };
-  }
-
-  async refresh(dto: AuthRefreshDto) {
-    console.log(dto);
   }
 }

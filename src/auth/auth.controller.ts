@@ -3,6 +3,7 @@ import {
   ClassSerializerInterceptor,
   Controller,
   Post,
+  Req,
   UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
@@ -31,7 +32,8 @@ export class AuthController {
   }
 
   @Post('refresh')
-  refresh(@Body(ValidationPipe) dto: AuthRefreshDto) {
-    return this.authService.refresh(dto);
+  refresh(@Req() req, @Body(ValidationPipe) dto: AuthRefreshDto) {
+    const { id } = req.user;
+    return this.authService.refresh(id, dto);
   }
 }

@@ -2,6 +2,7 @@ import { ConfigService } from '@nestjs/config';
 import {
   CanActivate,
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -27,7 +28,7 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    const request = context.switchToHttp().getRequest();
+    const request: Request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
 
     if (!token) {
@@ -35,12 +36,28 @@ export class AuthGuard implements CanActivate {
     }
 
     try {
-      const payload = await this.jwtService.verifyAsync(token, {
+      const accessPayload = await this.jwtService.verifyAsync(token, {
         secret: this.configService.get('JWT_SECRET_KEY'),
       });
-      request['user'] = payload;
+      request['user'] = accessPayload;
     } catch {
-      throw new UnauthorizedException();
+      const refreshToken = request.body?.refreshToken;
+
+      if (!refreshToken) {
+        throw new UnauthorizedException();
+      }
+
+      try {
+        const refreshPayload = await this.jwtService.verifyAsync(refreshToken, {
+          secret: this.configService.get('JWT_SECRET_REFRESH_KEY'),
+        });
+
+        request['user'] = refreshPayload;
+
+        return true;
+      } catch {
+        throw new ForbiddenException();
+      }
     }
 
     return true;

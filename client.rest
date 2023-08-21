@@ -13,10 +13,56 @@
 #################################################
 
 
-@userid = 5b7604e1-909a-45ef-ab80-0c5d708d6833
+@userid = 09981b01-029b-4a4b-bf5d-684f1b984325
 @artistid = 60da35d9-ccbb-4c3e-baf6-121a7cb431eb
 @trackid = 44a3a027-7413-44f1-afff-fbd27396b318
 @albumid = f7990b3f-726e-460a-82bc-57b13e211772
+
+@accesstoken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg1YzEwNzI0LTIxNGQtNGRiNi05NDNkLTMzNzVhMjczNWYyMCIsImxvZ2luIjoiVXNlcjEiLCJpYXQiOjE2OTI2MDcwMTMsImV4cCI6MTY5MjYwNzA0M30.JRQQOz3ZbU-gjb75_wCrDoc2A9JTK1z67unDrnhNdVI
+
+@refreshtoken = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6Ijg1YzEwNzI0LTIxNGQtNGRiNi05NDNkLTMzNzVhMjczNWYyMCIsImxvZ2luIjoiVXNlcjEiLCJpYXQiOjE2OTI2MDcwMTMsImV4cCI6MTY5MjY5MzQxM30.TyyxiHwEZGSVQllgAx6Fulqt3y7cTFVWqhDiDvuccpE
+#################################################
+##################### AUTH ######################
+#################################################
+
+#
+# /auth
+#
+
+
+#
+### /signup
+#
+POST http://{{host}}/auth/signup HTTP/1.1
+Content-Type: application/json
+
+{
+  "login": "User1",
+  "password": "passsssss"
+}
+
+
+#
+### /login
+#
+POST http://{{host}}/auth/login HTTP/1.1
+Content-Type: application/json
+
+{
+  "login": "User1",
+  "password": "passsssss"
+}
+
+#
+### /refresh
+#
+POST http://{{host}}/auth/refresh HTTP/1.1
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refreshtoken}}"
+}
+
 
 
 #################################################
@@ -31,11 +77,13 @@
 ### getAllUsers
 #
 GET http://{{host}}/user HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 
 #
 ### createUser
 #
 POST http://{{host}}/user HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 Content-Type: application/json
 
 {
@@ -47,17 +95,17 @@ Content-Type: application/json
 ### getUserById
 #
 GET http://{{host}}/user/{{userid}} HTTP/1.1
-1691096534762
-1691096404
+Authorization: Bearer {{accesstoken}}
 
 #
 ### updateUserById
 #
 PUT http://{{host}}/user/{{userid}} HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 Content-Type: application/json
 
 {
-  "oldPassword": "aaaaaaaa",
+  "oldPassword": "aaaaaaa",
   "newPassword": "aaaaaa"
 }
 
@@ -65,6 +113,7 @@ Content-Type: application/json
 ### deleteUserById
 #
 DELETE  http://{{host}}/user/{{userid}} HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 
 
 #################################################
@@ -79,11 +128,13 @@ DELETE  http://{{host}}/user/{{userid}} HTTP/1.1
 ### getAllArtists
 #
 GET http://{{host}}/artist HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 
 #
 ### createArtist
 #
 POST http://{{host}}/artist HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 Content-Type: application/json
 
 {
@@ -95,12 +146,14 @@ Content-Type: application/json
 ### getArtistById
 #
 GET http://{{host}}/artist/{{artistid}} HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 
 
 #
 ### updateArtistById
 #
 PUT http://{{host}}/artist/{{artistid}} HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 Content-Type: application/json
 
 {
@@ -111,6 +164,7 @@ Content-Type: application/json
 ### deleteArtistById
 #
 DELETE  http://{{host}}/artist/{{artistid}} HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 
 
 #################################################
@@ -125,11 +179,13 @@ DELETE  http://{{host}}/artist/{{artistid}} HTTP/1.1
 ### getAllTracks
 #
 GET http://{{host}}/track HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 
 #
 ### createTrack
 #
 POST http://{{host}}/track HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 Content-Type: application/json
 
 {
@@ -143,11 +199,13 @@ Content-Type: application/json
 ### getTrackById
 #
 GET http://{{host}}/track/{{trackid}} HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 
 #
 ### updateTrackById
 #
 PUT http://{{host}}/track/{{trackid}} HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 Content-Type: application/json
 
 {
@@ -158,6 +216,7 @@ Content-Type: application/json
 ### deleteTrackById
 #
 DELETE  http://{{host}}/track/{{trackid}} HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 
 
 #################################################
@@ -173,11 +232,13 @@ DELETE  http://{{host}}/track/{{trackid}} HTTP/1.1
 # getAllAlbums
 #
 GET http://{{host}}/album HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 
 #
 # createAlbum
 #
 POST http://{{host}}/album HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 Content-Type: application/json
 
 {
@@ -190,11 +251,13 @@ Content-Type: application/json
 # getAlbumById
 #
 GET http://{{host}}/album/{{albumid}} HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 
 #
 # UpdateAlbumById
 #
 PUT http://{{host}}/album/{{albumid}} HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 Content-Type: application/json
 
 {
@@ -205,6 +268,7 @@ Content-Type: application/json
 # deleteAlbumById
 #
 DELETE  http://{{host}}/album/{{albumid}} HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 
 
 #################################################
@@ -219,38 +283,45 @@ DELETE  http://{{host}}/album/{{albumid}} HTTP/1.1
 # getAllFavorites
 #
 GET http://{{host}}/favs HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 
 
 #
 # addTrackToFavorites
 #
 POST http://{{host}}/favs/track/4317cb57-9170-446e-a5dd-bcb8741b6119 HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 
 #
 # deleteTrackFromFavorites
 #
 DELETE  http://{{host}}/favs/track/{{trackid}} HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 
 
 #
 # addAlbumToFavorites
 #
 POST http://{{host}}/favs/album/{{albumid}} HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 
 #
 # deleteAlbumFromFavorites
 #
 DELETE  http://{{host}}/favs/album/{{albumid}} HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 
 
 #
 # addArtistToFavorites
 #
 POST http://{{host}}/favs/artist/{{artistid}} HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 
 #
 # deleteArtistFromFavorites
 #
 DELETE  http://{{host}}/favs/artist/{{artistid}} HTTP/1.1
+Authorization: Bearer {{accesstoken}}
 
 

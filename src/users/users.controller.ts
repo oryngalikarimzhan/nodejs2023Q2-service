@@ -63,7 +63,7 @@ export class UsersController {
   @ApiUnauthorizedResponse(ResponseDescription.NO_ACCESS_TOKEN)
   @ApiNotFoundResponse(ResponseDescription.NOT_FOUND)
   findOne(@Param('userId', ParseUUIDPipe) userId: string) {
-    return this.usersService.findOne(userId);
+    return this.usersService.findOneById(userId);
   }
 
   @Post()

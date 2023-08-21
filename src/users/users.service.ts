@@ -1,3 +1,4 @@
+import { ConfigService } from '@nestjs/config';
 import {
   BadRequestException,
   ForbiddenException,
@@ -6,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { hash, compare } from 'bcrypt';
 
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserPasswordDto } from './dto/update-user-password.dto';
@@ -16,13 +18,14 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+    private readonly configService: ConfigService,
   ) {}
 
   async findAll() {
     return await this.usersRepository.find();
   }
 
-  async findOne(id: string) {
+  async findOneById(id: string) {
     const user = await this.usersRepository.findOneBy({ id });
 
     if (!user) {
@@ -32,10 +35,23 @@ export class UsersService {
     return user;
   }
 
-  async create(createUserDto: CreateUserDto) {
-    this.checkLoginExistence(createUserDto.login);
+  async findOneByLogin(login: string) {
+    return await this.usersRepository.findOneBy({ login });
+  }
 
-    const user = this.usersRepository.create(createUserDto);
+  async create(createUserDto: CreateUserDto) {
+    const { login, password } = createUserDto;
+    this.checkLoginExistence(login);
+
+    const hashedPassword = await hash(
+      password,
+      +this.configService.get('CRYPT_SALT'),
+    );
+
+    const user = this.usersRepository.create({
+      login,
+      password: hashedPassword,
+    });
 
     return await this.usersRepository.save(user);
   }
@@ -44,9 +60,9 @@ export class UsersService {
     id: string,
     { oldPassword, newPassword }: UpdateUserPasswordDto,
   ) {
-    const user = await this.findOne(id);
+    const user = await this.findOneById(id);
 
-    if (user.password !== oldPassword) {
+    if (!(await compare(oldPassword, user.password))) {
       throw new ForbiddenException('old password is wrong');
     }
 
@@ -56,8 +72,16 @@ export class UsersService {
       );
     }
 
-    user.password = newPassword;
+    user.password = await hash(
+      newPassword,
+      +this.configService.get('CRYPT_SALT'),
+    );
 
+    return this.usersRepository.save(user);
+  }
+
+  async updateRefreshToken(user: User, refreshToken: string) {
+    user.refreshToken = refreshToken;
     return this.usersRepository.save(user);
   }
 
